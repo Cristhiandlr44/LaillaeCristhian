@@ -41,7 +41,7 @@
 :root {
     --color-dark-green: #2d4a2d;
     --color-cream: #f5f1e8;
-    --color-off-white: #FCF6EA;
+    --color-off-white: #E6E1DB;
     --color-text-dark: #1a1a1a;
     --color-text-light: #666;
     --color-accent: #4a6b4a;
@@ -67,6 +67,7 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    filter: grayscale(100%);
 }
 
 .script-font {
@@ -126,7 +127,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(66, 83, 64, 0.6);
+    background: transparent;
     z-index: 1;
 }
 
@@ -242,7 +243,7 @@ body {
     z-index: 0;
     aspect-ratio: 3 / 4;
     object-fit: cover;
-    filter: hue-rotate(100deg) saturate(1.2) brightness(0.85);
+    
 }
 
 .couple-image-wrapper:hover .couple-image {

@@ -35,7 +35,7 @@
         <div class="container-fullscreen">
             <div class="couple-content">
                 <div class="couple-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cristhian & Lailla" class="couple-image">
+                    <img src="{{ asset('2 imagem.jpeg') }}"  alt="Cristhian & Lailla" class="couple-image">
                 </div>
                 <div class="couple-info">
                     <h2 class="couple-date-top">9 de Maio</h2>
