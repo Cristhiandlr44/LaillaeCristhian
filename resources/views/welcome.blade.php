@@ -30,17 +30,31 @@
         </div>
     </section>
 
-    <!-- Section 2: Foto do Casal com Data e Local -->
+    <!-- Section 2: Nossa História -->
     <section class="section-fullscreen section-couple" id="couple">
         <div class="container-fullscreen">
+            <h2 class="couple-section-title">nossa história</h2>
             <div class="couple-content">
-                <div class="couple-image-wrapper">
-                    <img src="{{ asset('2 imagem.jpeg') }}"  alt="Cristhian & Lailla" class="couple-image">
+                <div class="couple-images-montage">
+                    <img src="{{ asset('3 imagem.jpeg') }}" alt="Cristhian & Lailla" class="couple-image-bottom">
+                    <img src="{{ asset('2 imagem.jpeg') }}" alt="Cristhian & Lailla" class="couple-image-top">
                 </div>
                 <div class="couple-info">
-                    <h2 class="couple-date-top">9 de Maio</h2>
-                    <p class="couple-date-middle">no</p>
-                    <h3 class="couple-date-bottom">Sítio Tira Teima</h3>
+                    <div class="couple-story-text">
+                        <p>Dois caminhos que se cruzam,</p>
+                        <p>no tempo exato de se encontrar.</p>
+                        <p>Ela, a mente que sonha nos</p>
+                        <p>detalhes, ele, o coração que</p>
+                        <p>floresce no instante.</p>
+                        <p>Entre opostos nasceu equilíbrio,</p>
+                        <p>entre diferenças completude,</p>
+                        <p>amizade tornou-se destino,</p>
+                        <p>companheirismo eternidade.</p>
+                        <p>E no enlace das almas, o amor</p>
+                        <p>se fez promessa.</p>
+                        <p>Porque toda história de amor é</p>
+                        <p>bonita, mas a nossa é a minha favorita.</p>
+                    </div>
                 </div>
             </div>
         </div>
