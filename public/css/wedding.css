@@ -40,7 +40,7 @@
 
 :root {
     --color-dark-green: #2d4a2d;
-    --color-cream: #f5f1e8;
+    --color-cream: #e8dfca;
     --color-off-white: #E6E1DB;
     --color-text-dark: #1a1a1a;
     --color-text-light: #666;
@@ -348,29 +348,37 @@ body {
    SECTION 3: TIMELINE
    ==================================== */
 
-.section-timeline {
-    background: var(--color-dark-green);
-    color: var(--color-cream);
-}
+    .section-timeline {
+        background: white;
+        color: var(--color-cream);
+    }
 
-.section-timeline .section-title {
-    color: var(--color-cream);
-}
+    .section-timeline .section-title {
+        color: var(--color-cream);
+        font-size: 9rem;
+        margin-top: -8rem;
+        z-index: 1;
 
-.section-subtitle {
-    text-align: center;
-    font-size: 1.2rem;
-    color: var(--color-cream);
-    margin-bottom: 3rem;
-    font-style: italic;
-    opacity: 0.9;
-}
+    }
+
+    .section-subtitle {
+        position: relative;
+        top: 8rem;
+        margin-left: 30rem;
+        text-align: center;
+        font-size: 2.5rem;
+        color: rgb(88, 87, 87);
+        margin-bottom: -3rem;
+        font-style: italic;
+        opacity: 0.9;
+        z-index: 2;               /* fica na frente do título */
+
+    }
 
 .timeline {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 2rem;
-    margin-top: 3rem;
 }
 
 .timeline-item {

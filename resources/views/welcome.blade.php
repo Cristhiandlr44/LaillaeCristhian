@@ -64,9 +64,9 @@
     <!-- Section 3: Informações do Dia -->
     <section class="section-fullscreen section-timeline" id="timeline">
         <div class="container-fullscreen">
-            <h2 class="section-title">O Dia</h2>
-            <p class="section-subtitle">Nosso dia especial começa no lobby principal, encontre-nos lá às 12:30</p>
-            
+        <p class="section-subtitle">Junte-se a nós para o ínico do nosso para sempre!</p>        
+
+            <h2 class="section-title">O CASAMENTO</h2>
             <div class="timeline">
                 <div class="timeline-item">
                     <i class="bi bi-heart icon-timeline"></i>
