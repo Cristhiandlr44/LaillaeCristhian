@@ -257,20 +257,29 @@ body {
     line-height: 1;
     white-space: nowrap;
     overflow: hidden;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 .couple-info {
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    text-align: center;
+    text-align: left;
 }
 
 .couple-story-text {
     max-width: 600px;
     margin: 0 auto;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    text-align: left;
 }
 
 .couple-story-text p {
@@ -280,6 +289,10 @@ body {
     line-height: 1.8;
     margin: 0.5rem 0;
     font-style: italic;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 .couple-story-final {
@@ -809,12 +822,25 @@ body {
     .section-title {
         font-size: 2rem;
     }
-    
+    .couple-section-subtitle {
+        position: relative;
+        top:8rem;
+        margin-left: 80rem;
+        font-size: 2.5rem;
+        text-align: center;
+        color: var(--color-dark-green);
+        margin-bottom: 1rem;
+        font-style: italic;
+        opacity: 0.9;
+    }
     .couple-section-title {
-        font-size: 18rem;
+        font-size: clamp(2rem, 6vw, 4rem) !important;
+        text-align: center !important;
+        color: var(--color-dark-green) !important;
         margin-bottom: 2rem;
-        letter-spacing: 3px;
-        
+        letter-spacing: 4px !important;
+        width: 95% !important;
+        opacity: 0.4 !important;
     }
     
     .couple-story-text {

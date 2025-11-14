@@ -13,7 +13,7 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
-    <link rel="stylesheet" href="{{ asset('css/wedding.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/wedding.css') }}?v={{ time() }}">
     </head>
 <body>
     <!-- Section 1: Hero with Background Image -->
@@ -33,6 +33,7 @@
     <!-- Section 2: Nossa História -->
     <section class="section-fullscreen section-couple" id="couple">
         <div class="container-fullscreen">
+            <p class="couple-section-subtitle">De um encontro casual ao nosso para sempre</p>
             <h2 class="couple-section-title">nossa história</h2>
             <div class="couple-content">
                 <div class="couple-images-montage">
