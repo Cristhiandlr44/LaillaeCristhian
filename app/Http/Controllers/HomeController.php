@@ -11,11 +11,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $stories = Story::active()->ordered()->take(3)->get();
-        $venues = Venue::orderBy('event_date')->orderBy('event_time')->get();
-        $featuredGifts = Gift::available()->take(6)->get();
-
-        return view('home', compact('stories', 'venues', 'featuredGifts'));
+        $gifts = Gift::orderBy('name')->get();
+        return view('welcome', compact('gifts'));
     }
 
     public function saveTheDate()
@@ -24,5 +21,12 @@ class HomeController extends Controller
         $venue = Venue::ceremony()->first();
         
         return view('save-the-date', compact('weddingDate', 'venue'));
+    }
+
+    public function submitRsvp(Request $request)
+    {
+        // TODO: Implement RSVP submission logic
+        // For now, just return success
+        return redirect()->route('home')->with('success', 'Obrigado por confirmar sua presença!');
     }
 }

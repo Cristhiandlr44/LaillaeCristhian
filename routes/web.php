@@ -24,3 +24,6 @@ Route::get('/local/{venue}', [VenueController::class, 'show'])->name('venues.sho
 Route::get('/lojinha', [GiftController::class, 'index'])->name('gifts.index');
 Route::get('/lojinha/{gift}', [GiftController::class, 'show'])->name('gifts.show');
 Route::post('/lojinha/{gift}/comprar', [GiftController::class, 'purchase'])->name('gifts.purchase');
+
+// RSVP
+Route::post('/rsvp', [HomeController::class, 'submitRsvp'])->name('rsvp.submit');
