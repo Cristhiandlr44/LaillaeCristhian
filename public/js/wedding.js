@@ -52,4 +52,133 @@ document.addEventListener('DOMContentLoaded', function() {
     if (urlParams.get('success') || window.location.hash === '#success') {
         alert('Obrigado por confirmar sua presença! Entraremos em contato em breve.');
     }
+    
+    // Info buttons toggle functionality
+    const infoButtons = document.querySelectorAll('.info-button');
+    const infoContents = document.querySelectorAll('.info-content');
+    
+    infoButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            
+            // Toggle active state
+            const isActive = this.classList.contains('active');
+            
+            // Remove active state from all buttons
+            infoButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Hide all content
+            infoContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // If button was not active, activate it and show content
+            if (!isActive) {
+                this.classList.add('active');
+                if (targetContent) {
+                    targetContent.classList.remove('hidden');
+                }
+            }
+        });
+    });
+    
+    // Countdown timer
+    const weddingDate = new Date('2026-05-09T15:00:00').getTime();
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = weddingDate - now;
+        
+        if (distance < 0) {
+            document.getElementById('days').textContent = '0';
+            document.getElementById('hours').textContent = '0';
+            document.getElementById('minutes').textContent = '0';
+            document.getElementById('seconds').textContent = '0';
+            return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = days;
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+    }
+    
+    // Update countdown immediately and then every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Header visibility on scroll and hover
+    const header = document.querySelector('.main-header');
+    let lastScrollTop = 0;
+    let isHoveringTop = false;
+    
+    // Detect mouse position near top of page
+    document.addEventListener('mousemove', function(e) {
+        if (e.clientY <= 80) {
+            // Mouse is near top
+            if (!isHoveringTop && header) {
+                isHoveringTop = true;
+                header.classList.add('visible');
+            }
+        } else {
+            // Mouse moved away from top
+            if (isHoveringTop && window.scrollY > 100) {
+                isHoveringTop = false;
+                // Only hide if not hovering over header itself
+                setTimeout(() => {
+                    if (!header.matches(':hover') && !isHoveringTop) {
+                        header.classList.remove('visible');
+                    }
+                }, 100);
+            }
+        }
+    });
+    
+    // Show header when hovering over header itself
+    if (header) {
+        header.addEventListener('mouseenter', function() {
+            this.classList.add('visible');
+        });
+        
+        header.addEventListener('mouseleave', function(e) {
+            if (window.scrollY > 100 && e.clientY > 80) {
+                this.classList.remove('visible');
+            }
+        });
+    }
+    
+    // Handle scroll behavior
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Show header when scrolling up or at the top
+        if (scrollTop < 100) {
+            if (header) {
+                header.classList.add('visible');
+            }
+        } else if (scrollTop > lastScrollTop) {
+            // Scrolling down - hide header (unless hovering)
+            if (header && !isHoveringTop && !header.matches(':hover')) {
+                header.classList.remove('visible');
+            }
+        } else {
+            // Scrolling up - show header
+            if (header) {
+                header.classList.add('visible');
+            }
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, false);
+    
+    // Show header initially if at top
+    if (window.scrollY < 100 && header) {
+        header.classList.add('visible');
+    }
 });
