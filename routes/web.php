@@ -23,6 +23,12 @@ Route::get('/local/{venue}', [VenueController::class, 'show'])->name('venues.sho
 // Lojinha (Lista de presentes)
 Route::get('/lojinha', [GiftController::class, 'index'])->name('gifts.index');
 Route::get('/lojinha/{gift}', [GiftController::class, 'show'])->name('gifts.show');
+Route::get('/lojinha/{gift}/pagamento', [GiftController::class, 'payment'])->name('gifts.payment');
+Route::post('/lojinha/{gift}/processar-pagamento', [GiftController::class, 'processPayment'])->name('gifts.process-payment');
+Route::get('/lojinha/{gift}/pagamento/sucesso', [GiftController::class, 'paymentSuccess'])->name('gifts.payment.success');
+Route::get('/lojinha/{gift}/pagamento/falha', [GiftController::class, 'paymentFailure'])->name('gifts.payment.failure');
+Route::get('/lojinha/{gift}/pagamento/pendente', [GiftController::class, 'paymentPending'])->name('gifts.payment.pending');
+Route::post('/lojinha/pagamento/webhook', [GiftController::class, 'paymentWebhook'])->name('gifts.payment.webhook');
 Route::post('/lojinha/{gift}/comprar', [GiftController::class, 'purchase'])->name('gifts.purchase');
 
 // RSVP

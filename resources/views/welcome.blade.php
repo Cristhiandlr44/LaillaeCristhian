@@ -137,7 +137,7 @@
                                 <div class="dresscode-text">
                                     <p>Nosso casamento acontecerá durante o dia e ao ar livre. Por isso, sugerimos trajes leves, elegantes e confortáveis.</p>
                                     <p>Tons suaves e alegres, tecidos fluidos e peças que combinem com a luz do dia são muito bem-vindos. Lembramos também que o evento seguirá até a noite, então escolhas que transitem bem entre o dia e a noite são ideais.</p>
-                                    <p>As convidadas podem optar por vestidos midi ou longos leves, e os convidados por traje esporte fino. Sapatos confortáveis para o gramado são recomendados.</p>
+                                    <p>As convidadas podem optar por vestidos longos leves, e os convidados por traje passeio completo. Sapatos confortáveis para o gramado são recomendados.</p>
                                     <p>A ideia é que todos se sintam à vontade, mantendo a elegância e aproveitando cada momento ao nosso lado.</p>
                                 </div>
                             </div>

@@ -833,7 +833,7 @@ body {
         margin-left: 30rem;
         text-align: center;
         font-size: 2.4rem;
-        color: rgb(132, 132, 132);
+        color: rgb(43, 38, 38);
         margin-bottom: -3rem;
         font-style: italic;
         opacity: 0.9;
@@ -1297,6 +1297,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    filter: grayscale(100%);
 }
 
 .footer-quote {

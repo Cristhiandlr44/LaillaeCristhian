@@ -97,6 +97,14 @@ class WeddingSeeder extends Seeder
         // Create Gifts
         $gifts = [
             [
+                'name' => 'Item de Teste',
+                'description' => 'Este é um item de teste para validar o sistema de pagamento. Valor de R$ 10,00.',
+                'price' => 10.00,
+                'image_url' => 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                'store_url' => null,
+                'is_purchased' => false,
+            ],
+            [
                 'name' => 'Jogo de Panelas Antiaderente',
                 'description' => 'Conjunto completo de panelas antiaderentes para nossa nova cozinha. Perfeito para começarmos a cozinhar juntos como família.',
                 'price' => 299.90,
