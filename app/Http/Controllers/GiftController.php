@@ -182,10 +182,25 @@ class GiftController extends Controller
                     'has_sandbox_init_point' => isset($preference['sandbox_init_point'])
                 ]);
                 
-                if ($preference && $useProduction && isset($preference['init_point'])) {
-                    // PRODUÇÃO: Sempre usar init_point (nunca sandbox em produção)
-                    \Log::info('Redirecionando para init_point (PRODUÇÃO)', ['url' => $preference['init_point']]);
-                    return redirect($preference['init_point']);
+                // FORÇAR produção se APP_ENV=production E URL é HTTPS
+                // Não usar sandbox_init_point em produção de forma alguma
+                if ($preference && $useProduction) {
+                    if (isset($preference['init_point'])) {
+                        // PRODUÇÃO: Sempre usar init_point (nunca sandbox em produção)
+                        \Log::info('Redirecionando para init_point (PRODUÇÃO FORÇADA)', [
+                            'url' => $preference['init_point'],
+                            'init_point' => $preference['init_point'],
+                            'sandbox_init_point' => $preference['sandbox_init_point'] ?? 'não disponível'
+                        ]);
+                        return redirect($preference['init_point']);
+                    } else {
+                        // Se não tiver init_point em produção, é um erro grave
+                        \Log::error('ERRO: Produção sem init_point disponível!', [
+                            'preference_id' => $preference['id'] ?? 'não disponível',
+                            'has_sandbox' => isset($preference['sandbox_init_point'])
+                        ]);
+                        return redirect()->back()->with('error', 'Erro na configuração do pagamento. Entre em contato com o suporte.');
+                    }
                 } elseif ($preference && !$useProduction && isset($preference['sandbox_init_point'])) {
                     // DESENVOLVIMENTO: Usar sandbox_init_point
                     \Log::info('Redirecionando para sandbox_init_point (DESENVOLVIMENTO)', ['url' => $preference['sandbox_init_point']]);
