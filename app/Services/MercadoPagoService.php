@@ -165,6 +165,15 @@ class MercadoPagoService
                 'successful' => $response->successful(),
                 'body' => $response->body()
             ]);
+            
+            // Log detalhado se houver erro na resposta
+            if (!$response->successful()) {
+                Log::error('Erro na resposta do Mercado Pago', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'headers' => $response->headers()
+                ]);
+            }
 
             if ($response->successful()) {
                 $jsonResponse = $response->json();

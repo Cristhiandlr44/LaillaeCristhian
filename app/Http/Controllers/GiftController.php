@@ -92,16 +92,41 @@ class GiftController extends Controller
                     ]
                 ];
 
-                // Adicionar back_urls apenas se for HTTPS (produção)
-                // Em desenvolvimento local com HTTP, o Mercado Pago não aceita back_urls
-                // Mas ainda funciona, apenas não redireciona automaticamente
-                if (str_starts_with($successUrl, 'https://')) {
+                // IMPORTANTE: O Mercado Pago requer back_urls HTTPS para ativar o botão de pagar
+                // Em desenvolvimento local (HTTP), o Mercado Pago rejeita os back_urls
+                // Solução: Use ngrok ou similar para criar um túnel HTTPS
+                // 
+                // Verificar se temos uma URL HTTPS configurada (ex: via ngrok)
+                $ngrokUrl = env('NGROK_URL', null);
+                $isHttps = str_starts_with($successUrl, 'https://') || $ngrokUrl;
+                
+                if ($isHttps && $ngrokUrl) {
+                    // Se ngrok estiver configurado, usar URLs HTTPS
+                    $baseUrl = rtrim($ngrokUrl, '/');
+                    $preferenceData['back_urls'] = [
+                        'success' => $baseUrl . parse_url($successUrl, PHP_URL_PATH),
+                        'failure' => $baseUrl . parse_url($failureUrl, PHP_URL_PATH),
+                        'pending' => $baseUrl . parse_url($pendingUrl, PHP_URL_PATH)
+                    ];
+                    $preferenceData['auto_return'] = 'approved';
+                } elseif (str_starts_with($successUrl, 'https://')) {
+                    // Produção com HTTPS
                     $preferenceData['back_urls'] = [
                         'success' => $successUrl,
                         'failure' => $failureUrl,
                         'pending' => $pendingUrl
                     ];
                     $preferenceData['auto_return'] = 'approved';
+                } else {
+                    // Desenvolvimento local sem HTTPS - tentar enviar mesmo assim
+                    // O Mercado Pago pode rejeitar, mas alguns casos funcionam
+                    $preferenceData['back_urls'] = [
+                        'success' => $successUrl,
+                        'failure' => $failureUrl,
+                        'pending' => $pendingUrl
+                    ];
+                    // Log de aviso
+                    \Log::warning('Usando back_urls HTTP - o botão pode não funcionar. Configure NGROK_URL no .env para desenvolvimento');
                 }
 
                 // Adicionar notification_url apenas se for HTTPS (produção)
@@ -131,14 +156,21 @@ class GiftController extends Controller
                 ]);
 
                 // Verificar se a preferência foi criada com sucesso
-                // Em produção, usar init_point. Em desenvolvimento/teste, usar sandbox_init_point
-                if ($preference && isset($preference['init_point'])) {
-                    // Priorizar init_point (produção) se disponível
+                // Em desenvolvimento/teste, priorizar sandbox_init_point
+                // Em produção, usar init_point
+                $isProduction = str_starts_with($successUrl, 'https://');
+                
+                if ($preference && isset($preference['sandbox_init_point']) && !$isProduction) {
+                    // Em desenvolvimento, usar sandbox_init_point (modo de teste)
+                    \Log::info('Redirecionando para sandbox_init_point (teste)', ['url' => $preference['sandbox_init_point']]);
+                    return redirect($preference['sandbox_init_point']);
+                } elseif ($preference && isset($preference['init_point'])) {
+                    // Em produção ou se não tiver sandbox, usar init_point
                     \Log::info('Redirecionando para init_point (produção)', ['url' => $preference['init_point']]);
                     return redirect($preference['init_point']);
                 } elseif ($preference && isset($preference['sandbox_init_point'])) {
-                    // Se não tiver init_point, usar sandbox_init_point (modo de teste)
-                    \Log::info('Redirecionando para sandbox_init_point (teste)', ['url' => $preference['sandbox_init_point']]);
+                    // Fallback: usar sandbox se init_point não estiver disponível
+                    \Log::info('Redirecionando para sandbox_init_point (fallback)', ['url' => $preference['sandbox_init_point']]);
                     return redirect($preference['sandbox_init_point']);
                 } else {
                     // Log do erro detalhado
