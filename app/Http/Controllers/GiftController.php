@@ -167,21 +167,36 @@ class GiftController extends Controller
                 ]);
 
                 // Verificar se a preferência foi criada com sucesso
-                // Em desenvolvimento/teste, priorizar sandbox_init_point
-                // Em produção, usar init_point
-                $isProduction = str_starts_with($successUrl, 'https://');
+                // IMPORTANTE: Em produção, SEMPRE usar init_point (não sandbox)
+                // Em desenvolvimento, usar sandbox_init_point se disponível
+                $isProduction = str_starts_with($successUrl, 'https://') && !str_contains($successUrl, 'localhost') && !str_contains($successUrl, '127.0.0.1');
+                $isProductionEnv = config('app.env') === 'production';
+                $useProduction = $isProduction || $isProductionEnv;
                 
-                if ($preference && isset($preference['sandbox_init_point']) && !$isProduction) {
-                    // Em desenvolvimento, usar sandbox_init_point (modo de teste)
-                    \Log::info('Redirecionando para sandbox_init_point (teste)', ['url' => $preference['sandbox_init_point']]);
+                \Log::info('Decisão de ambiente', [
+                    'success_url' => $successUrl,
+                    'is_production_url' => $isProduction,
+                    'is_production_env' => $isProductionEnv,
+                    'use_production' => $useProduction,
+                    'has_init_point' => isset($preference['init_point']),
+                    'has_sandbox_init_point' => isset($preference['sandbox_init_point'])
+                ]);
+                
+                if ($preference && $useProduction && isset($preference['init_point'])) {
+                    // PRODUÇÃO: Sempre usar init_point (nunca sandbox em produção)
+                    \Log::info('Redirecionando para init_point (PRODUÇÃO)', ['url' => $preference['init_point']]);
+                    return redirect($preference['init_point']);
+                } elseif ($preference && !$useProduction && isset($preference['sandbox_init_point'])) {
+                    // DESENVOLVIMENTO: Usar sandbox_init_point
+                    \Log::info('Redirecionando para sandbox_init_point (DESENVOLVIMENTO)', ['url' => $preference['sandbox_init_point']]);
                     return redirect($preference['sandbox_init_point']);
                 } elseif ($preference && isset($preference['init_point'])) {
-                    // Em produção ou se não tiver sandbox, usar init_point
-                    \Log::info('Redirecionando para init_point (produção)', ['url' => $preference['init_point']]);
+                    // Fallback: usar init_point se disponível
+                    \Log::info('Redirecionando para init_point (fallback)', ['url' => $preference['init_point']]);
                     return redirect($preference['init_point']);
                 } elseif ($preference && isset($preference['sandbox_init_point'])) {
-                    // Fallback: usar sandbox se init_point não estiver disponível
-                    \Log::info('Redirecionando para sandbox_init_point (fallback)', ['url' => $preference['sandbox_init_point']]);
+                    // Último fallback: usar sandbox se init_point não estiver disponível
+                    \Log::warning('Usando sandbox_init_point como último recurso', ['url' => $preference['sandbox_init_point']]);
                     return redirect($preference['sandbox_init_point']);
                 } else {
                     // Log do erro detalhado
