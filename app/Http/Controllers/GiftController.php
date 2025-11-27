@@ -90,7 +90,10 @@ class GiftController extends Controller
                     'metadata' => [
                         'gift_id' => $gift->id,
                         'buyer_name' => $request->buyer_name
-                    ]
+                    ],
+                    // Adicionar locale para evitar erros JavaScript no checkout
+                    'site_id' => 'MLB', // Brasil
+                    'language' => 'pt-BR' // Português do Brasil
                 ];
 
                 // IMPORTANTE: O Mercado Pago requer back_urls HTTPS para ativar o botão de pagar
@@ -138,12 +141,12 @@ class GiftController extends Controller
                 }
                 
                 // Configurar payment_methods explicitamente para garantir que o botão funcione
-                // Não excluir nenhum método de pagamento (arrays vazios podem causar problemas)
+                // IMPORTANTE: Não enviar arrays vazios ou objetos vazios, isso pode causar problemas
+                // Se não queremos excluir nada, simplesmente não enviamos esses campos
                 $preferenceData['payment_methods'] = [
-                    'excluded_payment_methods' => [],
-                    'excluded_payment_types' => [],
                     'installments' => 12 // Permitir até 12 parcelas
                 ];
+                // Não incluir excluded_payment_methods ou excluded_payment_types se estiverem vazios
 
                 // Log dos dados que serão enviados
                 \Log::info('Criando preferência Checkout Pro', [
