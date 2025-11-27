@@ -93,7 +93,8 @@ class GiftController extends Controller
                     ],
                     // Adicionar locale para evitar erros JavaScript no checkout
                     'site_id' => 'MLB', // Brasil
-                    'language' => 'pt-BR' // Português do Brasil
+                    'language' => 'pt-BR', // Português do Brasil
+                    'locale' => 'pt-BR' // Locale explícito para o Mercado Pago
                 ];
 
                 // IMPORTANTE: O Mercado Pago requer back_urls HTTPS para ativar o botão de pagar
@@ -156,7 +157,10 @@ class GiftController extends Controller
                     'failure_url' => $failureUrl,
                     'pending_url' => $pendingUrl,
                     'has_payment_methods_config' => isset($preferenceData['payment_methods']),
-                    'binary_mode' => $preferenceData['binary_mode'] ?? 'not set'
+                    'binary_mode' => $preferenceData['binary_mode'] ?? 'not set',
+                    'site_id' => $preferenceData['site_id'] ?? 'not set',
+                    'language' => $preferenceData['language'] ?? 'not set',
+                    'locale' => $preferenceData['locale'] ?? 'not set'
                 ]);
 
                 $preference = $mercadoPagoService->createPreference($preferenceData);

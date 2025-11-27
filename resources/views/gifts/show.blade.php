@@ -169,7 +169,7 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/wedding.js') }}"></script>
+    <script src="{{ asset('js/wedding.js') }}?v={{ time() }}"></script>
     <style>
         /* Gift Detail Hero */
         .section-gift-detail-hero {

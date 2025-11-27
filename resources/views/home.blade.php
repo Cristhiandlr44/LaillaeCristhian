@@ -364,7 +364,22 @@
         !location.href.includes('/review/?preference-id')) {
         
         // Countdown Timer
+        let countdownInterval = null;
+        
         function updateCountdown() {
+            // PROTEÇÃO DUPLA: Verificar hostname dentro da função também
+            if (location.hostname.includes('mercadopago') || 
+                location.hostname.includes('mercadolivre') ||
+                location.href.includes('/checkout/v1/') ||
+                location.href.includes('/review/?preference-id')) {
+                // Limpar intervalo se estiver no Mercado Pago
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                return;
+            }
+            
             const daysEl = document.getElementById('days');
             const hoursEl = document.getElementById('hours');
             const minutesEl = document.getElementById('minutes');
@@ -373,6 +388,11 @@
             
             // Verificar se os elementos existem antes de manipular
             if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+                // Limpar intervalo se elementos não existirem
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
                 return;
             }
             
@@ -394,12 +414,24 @@
                 if (countdownEl) {
                     countdownEl.innerHTML = '<h2 style="color: var(--primary-color);">🎉 Hoje é o grande dia! 🎉</h2>';
                 }
+                // Limpar intervalo quando terminar
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
             }
         }
 
         // Update countdown every second
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        countdownInterval = setInterval(updateCountdown, 1000);
+        
+        // Limpar intervalo quando a página for descarregada
+        window.addEventListener('beforeunload', function() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
     }
 
         // Create particles

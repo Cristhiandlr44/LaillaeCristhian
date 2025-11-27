@@ -262,6 +262,6 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/wedding.js') }}"></script>
+    <script src="{{ asset('js/wedding.js') }}?v={{ time() }}"></script>
     </body>
 </html>

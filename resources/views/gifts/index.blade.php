@@ -294,7 +294,7 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/wedding.js') }}"></script>
+    <script src="{{ asset('js/wedding.js') }}?v={{ time() }}"></script>
     <script>
         // Ensure header is visible on gifts page
         document.addEventListener('DOMContentLoaded', function() {

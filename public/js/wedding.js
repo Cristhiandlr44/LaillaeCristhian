@@ -1,16 +1,27 @@
 // Wedding Site JavaScript
 
-// ISOLAR: Não executar scripts no domínio do Mercado Pago
-if (location.hostname.includes('mercadopago') || 
-    location.hostname.includes('mercadolivre') ||
-    location.href.includes('/checkout/v1/') ||
-    location.href.includes('/review/?preference-id')) {
-    // Não executar nada se estiver no domínio do Mercado Pago
-    console.log('Scripts isolados: domínio do Mercado Pago detectado');
-    return;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
+// PROTEÇÃO GLOBAL: Não executar scripts no domínio do Mercado Pago
+(function() {
+    'use strict';
+    
+    // Verificação robusta de hostname
+    const hostname = window.location.hostname || '';
+    const href = window.location.href || '';
+    
+    if (hostname.includes('mercadopago') || 
+        hostname.includes('mercadolivre') ||
+        href.includes('/checkout/v1/') ||
+        href.includes('/checkout/v1/payment/redirect') ||
+        href.includes('/review/?preference-id') ||
+        href.includes('mercadopago.com.br/checkout') ||
+        href.includes('sandbox.mercadopago.com.br')) {
+        // Não executar nada se estiver no domínio do Mercado Pago
+        console.log('Scripts isolados: domínio do Mercado Pago detectado', hostname);
+        return;
+    }
+    
+    // Continuar execução apenas se não estiver no Mercado Pago
+    document.addEventListener('DOMContentLoaded', function() {
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -102,16 +113,50 @@ document.addEventListener('DOMContentLoaded', function() {
     // Só executar countdown se os elementos existirem (não está no Mercado Pago)
     if (daysEl && hoursEl && minutesEl && secondsEl) {
         const weddingDate = new Date('2026-05-09T15:00:00').getTime();
+        let countdownInterval = null;
         
         function updateCountdown() {
+            // PROTEÇÃO DUPLA: Verificar hostname dentro da função também
+            if (location.hostname.includes('mercadopago') || 
+                location.hostname.includes('mercadolivre') ||
+                location.href.includes('/checkout/v1/') ||
+                location.href.includes('/review/?preference-id')) {
+                // Limpar intervalo se estiver no Mercado Pago
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                return;
+            }
+            
+            // Verificar novamente se os elementos existem
+            const daysElCheck = document.getElementById('days');
+            const hoursElCheck = document.getElementById('hours');
+            const minutesElCheck = document.getElementById('minutes');
+            const secondsElCheck = document.getElementById('seconds');
+            
+            if (!daysElCheck || !hoursElCheck || !minutesElCheck || !secondsElCheck) {
+                // Limpar intervalo se elementos não existirem
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                return;
+            }
+            
             const now = new Date().getTime();
             const distance = weddingDate - now;
             
             if (distance < 0) {
-                daysEl.textContent = '0';
-                hoursEl.textContent = '0';
-                minutesEl.textContent = '0';
-                secondsEl.textContent = '0';
+                daysElCheck.textContent = '0';
+                hoursElCheck.textContent = '0';
+                minutesElCheck.textContent = '0';
+                secondsElCheck.textContent = '0';
+                // Limpar intervalo quando terminar
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
                 return;
             }
             
@@ -120,15 +165,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            daysEl.textContent = days;
-            hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
+            daysElCheck.textContent = days;
+            hoursElCheck.textContent = hours;
+            minutesElCheck.textContent = minutes;
+            secondsElCheck.textContent = seconds;
         }
         
         // Update countdown immediately and then every second
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        countdownInterval = setInterval(updateCountdown, 1000);
+        
+        // Limpar intervalo quando a página for descarregada
+        window.addEventListener('beforeunload', function() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
     }
     
     // Header visibility on scroll and hover
@@ -199,4 +251,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.scrollY < 100 && header) {
         header.classList.add('visible');
     }
-});
+    });
+    
+})(); // Fim da IIFE de proteção

@@ -212,7 +212,7 @@
         </div>
     </footer>
 
-    <script src="{{ asset('js/wedding.js') }}"></script>
+    <script src="{{ asset('js/wedding.js') }}?v={{ time() }}"></script>
     <script>
         // ISOLAR: Não executar scripts no domínio do Mercado Pago
         if (!location.hostname.includes('mercadopago') && 
