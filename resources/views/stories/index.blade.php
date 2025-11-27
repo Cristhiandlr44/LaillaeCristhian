@@ -324,39 +324,49 @@
 
 @push('scripts')
 <script>
-    // Calculate days together (example start date - adjust as needed)
-    function calculateDaysTogether() {
-        const startDate = new Date('2020-01-01'); // Ajustar para a data real
-        const today = new Date();
-        const diffTime = Math.abs(today - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // ISOLAR: Não executar scripts no domínio do Mercado Pago
+    if (!location.hostname.includes('mercadopago') && 
+        !location.hostname.includes('mercadolivre') &&
+        !location.href.includes('/checkout/v1/') &&
+        !location.href.includes('/review/?preference-id')) {
         
-        // Animate the counter
-        let currentCount = 0;
-        const increment = Math.ceil(diffDays / 100);
-        const timer = setInterval(() => {
-            currentCount += increment;
-            if (currentCount >= diffDays) {
-                currentCount = diffDays;
-                clearInterval(timer);
-            }
-            document.getElementById('days-together').textContent = currentCount.toLocaleString();
-        }, 20);
-    }
-    
-    // Start animation when element comes into view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                calculateDaysTogether();
-                observer.unobserve(entry.target);
-            }
+        // Calculate days together (example start date - adjust as needed)
+        function calculateDaysTogether() {
+            const daysTogetherEl = document.getElementById('days-together');
+            if (!daysTogetherEl) return;
+            
+            const startDate = new Date('2020-01-01'); // Ajustar para a data real
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Animate the counter
+            let currentCount = 0;
+            const increment = Math.ceil(diffDays / 100);
+            const timer = setInterval(() => {
+                currentCount += increment;
+                if (currentCount >= diffDays) {
+                    currentCount = diffDays;
+                    clearInterval(timer);
+                }
+                daysTogetherEl.textContent = currentCount.toLocaleString();
+            }, 20);
+        }
+        
+        // Start animation when element comes into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    calculateDaysTogether();
+                    observer.unobserve(entry.target);
+                }
+            });
         });
-    });
-    
-    const daysElement = document.getElementById('days-together');
-    if (daysElement) {
-        observer.observe(daysElement);
+        
+        const daysElement = document.getElementById('days-together');
+        if (daysElement) {
+            observer.observe(daysElement);
+        }
     }
 </script>
 @endpush

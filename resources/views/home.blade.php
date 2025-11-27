@@ -357,80 +357,101 @@
 
 @push('scripts')
 <script>
-    // Countdown Timer
-    function updateCountdown() {
-        const weddingDate = new Date('2026-05-09T00:00:00').getTime();
-        const now = new Date().getTime();
-        const distance = weddingDate - now;
-
-        if (distance > 0) {
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = days.toString().padStart(3, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-        } else {
-            document.getElementById('countdown').innerHTML = '<h2 style="color: var(--primary-color);">🎉 Hoje é o grande dia! 🎉</h2>';
-        }
-    }
-
-    // Update countdown every second
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // Create particles
-    function createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        if (!particlesContainer) return;
-
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.width = particle.style.height = Math.random() * 4 + 2 + 'px';
-            particle.style.animationDelay = Math.random() * 8 + 's';
-            particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
-            particlesContainer.appendChild(particle);
-        }
-    }
-
-    // Create heart rain effect
-    function createHeartRain() {
-        const hearts = ['💕', '💖', '💗', '💝', '❤️'];
+    // ISOLAR: Não executar scripts no domínio do Mercado Pago
+    if (!location.hostname.includes('mercadopago') && 
+        !location.hostname.includes('mercadolivre') &&
+        !location.href.includes('/checkout/v1/') &&
+        !location.href.includes('/review/?preference-id')) {
         
-        setInterval(() => {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            heart.style.color = `rgba(212, 175, 55, ${Math.random() * 0.5 + 0.3})`;
+        // Countdown Timer
+        function updateCountdown() {
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const countdownEl = document.getElementById('countdown');
             
-            document.body.appendChild(heart);
+            // Verificar se os elementos existem antes de manipular
+            if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+                return;
+            }
             
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }, 3000);
+            const weddingDate = new Date('2026-05-09T00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.textContent = days.toString().padStart(3, '0');
+                hoursEl.textContent = hours.toString().padStart(2, '0');
+                minutesEl.textContent = minutes.toString().padStart(2, '0');
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+            } else {
+                if (countdownEl) {
+                    countdownEl.innerHTML = '<h2 style="color: var(--primary-color);">🎉 Hoje é o grande dia! 🎉</h2>';
+                }
+            }
+        }
+
+        // Update countdown every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     }
 
-    // Initialize effects
-    createParticles();
-    createHeartRain();
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
 
-    // Add sparkle effect to buttons
-    document.querySelectorAll('.btn').forEach(btn => {
-        btn.classList.add('sparkle');
-    });
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = Math.random() * 4 + 2 + 'px';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
 
-    // Add hover effects to cards
-    document.querySelectorAll('.card').forEach(card => {
-        card.classList.add('hover-lift');
-    });
+        // Create heart rain effect
+        function createHeartRain() {
+            const hearts = ['💕', '💖', '💗', '💝', '❤️'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                heart.style.color = `rgba(212, 175, 55, ${Math.random() * 0.5 + 0.3})`;
+                
+                document.body.appendChild(heart);
+            
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 3000);
+        }
+
+        // Initialize effects
+        createParticles();
+        createHeartRain();
+
+        // Add sparkle effect to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.classList.add('sparkle');
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.classList.add('hover-lift');
+        });
+    }
 </script>
 @endpush

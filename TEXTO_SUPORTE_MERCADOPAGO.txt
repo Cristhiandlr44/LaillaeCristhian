@@ -1,0 +1,95 @@
+Assunto: Botão de Pagamento Desabilitado - Conta em Processo de Homologação (Etapa 4/6)
+
+Prezados,
+
+Estou enfrentando um problema crítico com o Checkout Pro do Mercado Pago. Minha conta está na Etapa 4 de 6 do processo de homologação e preciso fazer um pagamento produtivo para continuar, porém o botão de pagamento está permanecendo desabilitado mesmo após preencher todos os campos obrigatórios.
+
+SITUAÇÃO:
+- Conta: Etapa 4 de 6 do processo de homologação
+- Necessidade: Realizar 1 pagamento produtivo para completar a homologação
+- Problema: Botão de pagamento desabilitado mesmo preenchendo todos os campos
+
+DETALHES TÉCNICOS:
+
+1. Credenciais:
+   - User ID: 184107787
+   - Application Number: 4141016698141462
+   - Credenciais de PRODUÇÃO (APP_USR-...)
+   - Site ID: MLB (Brasil)
+
+2. Configuração da Preferência:
+   - back_urls configurados corretamente (HTTPS)
+   - auto_return: 'approved'
+   - site_id: 'MLB'
+   - language: 'pt-BR'
+   - payment_methods: installments: 12
+   - binary_mode: false
+   - Redirecionamento para init_point (produção, não sandbox)
+
+3. Erros Identificados no Console do Navegador:
+   - TypeError: Cannot set properties of null (setting 'textContent')
+     Função: updateCountdown
+     Linha: 106
+     Arquivo: redirect/?preference...
+   
+   - [BRICKS WARN]: None locale was provided, using default
+     (Nota: Já corrigido no código adicionando site_id e language)
+
+4. Elemento do Botão:
+   - Classe: andes-button--disabled
+   - Atributo: disabled=""
+   - ID: :rh:
+   - O botão aparece na tela mas permanece desabilitado
+
+5. Ações Realizadas:
+   - Cadastrei um novo cartão de crédito
+   - Preenchi o código de segurança (CVV)
+   - Selecionei as parcelas
+   - Verifiquei que todos os campos obrigatórios estão preenchidos
+   - O botão continua desabilitado mesmo após todas essas ações
+
+6. Preference ID (último teste):
+   - Exemplo: 184107787-15d6bef6-5c47-4cde-874f-97dbd7ad77e9
+   - (Preference ID específico será fornecido nos logs mais recentes)
+
+LOGS DO SERVIDOR:
+O código está funcionando corretamente e redirecionando para:
+- init_point: https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=...
+- back_urls estão sendo aceitos pelo Mercado Pago
+- A preferência é criada com sucesso (status 201)
+
+VERIFICAÇÕES REALIZADAS:
+- ✅ Credenciais de produção corretas (não são de teste)
+- ✅ back_urls configurados com HTTPS
+- ✅ Redirecionamento para init_point (produção)
+- ✅ Locale configurado (site_id: MLB, language: pt-BR)
+- ✅ Todos os campos do formulário preenchidos
+- ✅ Cartão cadastrado e selecionado
+- ✅ CVV preenchido
+- ✅ Parcelas selecionadas
+
+PERGUNTAS:
+1. Como posso fazer o pagamento produtivo necessário para completar a homologação se o botão está desabilitado?
+2. Há alguma configuração adicional necessária na conta ou na preferência?
+3. O erro JavaScript "updateCountdown" está impedindo o funcionamento do botão?
+4. Há cartões especiais ou métodos alternativos para fazer o pagamento produtivo durante a homologação?
+5. Existe alguma restrição na conta que está bloqueando os pagamentos?
+
+INFORMAÇÕES ADICIONAIS:
+- Navegador: [INFORME SEU NAVEGADOR E VERSÃO]
+- Sistema Operacional: [INFORME SEU SO]
+- Screenshots anexados: Console do navegador, Página do checkout, Painel do Mercado Pago
+
+SOLICITAÇÃO:
+Por favor, preciso de orientação sobre como proceder para:
+1. Resolver o problema do botão desabilitado
+2. Completar o pagamento produtivo necessário para a homologação
+3. Finalizar o processo de homologação da conta
+
+Agradeço antecipadamente pela atenção e aguardo retorno.
+
+Atenciosamente,
+[SEU NOME]
+[SEU EMAIL]
+[SEU TELEFONE]
+

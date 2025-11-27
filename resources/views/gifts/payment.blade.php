@@ -214,13 +214,20 @@
 
     <script src="{{ asset('js/wedding.js') }}"></script>
     <script>
-        // Ensure header is visible
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('.main-header');
-            if (header) {
-                header.classList.add('visible');
-            }
-        });
+        // ISOLAR: Não executar scripts no domínio do Mercado Pago
+        if (!location.hostname.includes('mercadopago') && 
+            !location.hostname.includes('mercadolivre') &&
+            !location.href.includes('/checkout/v1/') &&
+            !location.href.includes('/review/?preference-id')) {
+            
+            // Ensure header is visible
+            document.addEventListener('DOMContentLoaded', function() {
+                const header = document.querySelector('.main-header');
+                if (header) {
+                    header.classList.add('visible');
+                }
+            });
+        }
     </script>
     <style>
         /* Ensure header is visible */

@@ -1,5 +1,15 @@
 // Wedding Site JavaScript
 
+// ISOLAR: Não executar scripts no domínio do Mercado Pago
+if (location.hostname.includes('mercadopago') || 
+    location.hostname.includes('mercadolivre') ||
+    location.href.includes('/checkout/v1/') ||
+    location.href.includes('/review/?preference-id')) {
+    // Não executar nada se estiver no domínio do Mercado Pago
+    console.log('Scripts isolados: domínio do Mercado Pago detectado');
+    return;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -83,35 +93,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Countdown timer
-    const weddingDate = new Date('2026-05-09T15:00:00').getTime();
+    // Countdown timer - ISOLADO: só executa se os elementos existirem
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
     
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = weddingDate - now;
+    // Só executar countdown se os elementos existirem (não está no Mercado Pago)
+    if (daysEl && hoursEl && minutesEl && secondsEl) {
+        const weddingDate = new Date('2026-05-09T15:00:00').getTime();
         
-        if (distance < 0) {
-            document.getElementById('days').textContent = '0';
-            document.getElementById('hours').textContent = '0';
-            document.getElementById('minutes').textContent = '0';
-            document.getElementById('seconds').textContent = '0';
-            return;
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) {
+                daysEl.textContent = '0';
+                hoursEl.textContent = '0';
+                minutesEl.textContent = '0';
+                secondsEl.textContent = '0';
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
         }
         
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        document.getElementById('days').textContent = days;
-        document.getElementById('hours').textContent = hours;
-        document.getElementById('minutes').textContent = minutes;
-        document.getElementById('seconds').textContent = seconds;
+        // Update countdown immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     }
-    
-    // Update countdown immediately and then every second
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
     
     // Header visibility on scroll and hover
     const header = document.querySelector('.main-header');

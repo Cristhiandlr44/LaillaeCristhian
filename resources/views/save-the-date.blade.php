@@ -542,21 +542,28 @@
 
 @push('scripts')
 <script>
-    function downloadCalendar() {
-        const event = {
-            title: 'Casamento Cristhian & Lailla',
-            start: '2026-05-09T16:00:00',
-            end: '2026-05-09T23:00:00',
-            description: 'Celebração do casamento de Cristhian Daniel Lima Rocha e Lailla Évelin Nunes Silva',
-            location: '{{ $venue ? $venue->full_address : "Local a confirmar" }}'
-        };
+    // ISOLAR: Não executar scripts no domínio do Mercado Pago
+    if (!location.hostname.includes('mercadopago') && 
+        !location.hostname.includes('mercadolivre') &&
+        !location.href.includes('/checkout/v1/') &&
+        !location.href.includes('/review/?preference-id')) {
         
-        const startDate = new Date(event.start).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        const endDate = new Date(event.end).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        
-        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
-        
-        window.open(googleCalendarUrl, '_blank');
+        function downloadCalendar() {
+            const event = {
+                title: 'Casamento Cristhian & Lailla',
+                start: '2026-05-09T16:00:00',
+                end: '2026-05-09T23:00:00',
+                description: 'Celebração do casamento de Cristhian Daniel Lima Rocha e Lailla Évelin Nunes Silva',
+                location: '{{ $venue ? $venue->full_address : "Local a confirmar" }}'
+            };
+            
+            const startDate = new Date(event.start).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            const endDate = new Date(event.end).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+            
+            window.open(googleCalendarUrl, '_blank');
+        }
     }
 </script>
 @endpush
