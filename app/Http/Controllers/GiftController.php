@@ -86,6 +86,7 @@ class GiftController extends Controller
                     ],
                     'external_reference' => $externalReference,
                     'statement_descriptor' => 'Cristhian & Lailla',
+                    'binary_mode' => false, // Desabilitar modo binário para permitir estados intermediários
                     'metadata' => [
                         'gift_id' => $gift->id,
                         'buyer_name' => $request->buyer_name
@@ -135,6 +136,14 @@ class GiftController extends Controller
                 if (str_starts_with($webhookUrl, 'https://')) {
                     $preferenceData['notification_url'] = $webhookUrl;
                 }
+                
+                // Configurar payment_methods explicitamente para garantir que o botão funcione
+                // Não excluir nenhum método de pagamento (arrays vazios podem causar problemas)
+                $preferenceData['payment_methods'] = [
+                    'excluded_payment_methods' => [],
+                    'excluded_payment_types' => [],
+                    'installments' => 12 // Permitir até 12 parcelas
+                ];
 
                 // Log dos dados que serão enviados
                 \Log::info('Criando preferência Checkout Pro', [
@@ -142,7 +151,9 @@ class GiftController extends Controller
                     'amount' => $gift->price,
                     'success_url' => $successUrl,
                     'failure_url' => $failureUrl,
-                    'pending_url' => $pendingUrl
+                    'pending_url' => $pendingUrl,
+                    'has_payment_methods_config' => isset($preferenceData['payment_methods']),
+                    'binary_mode' => $preferenceData['binary_mode'] ?? 'not set'
                 ]);
 
                 $preference = $mercadoPagoService->createPreference($preferenceData);
