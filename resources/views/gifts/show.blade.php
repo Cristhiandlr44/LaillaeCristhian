@@ -1,656 +1,377 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $gift->name }} - Lista de Presentes - Cristhian & Lailla</title>
+    <meta name="description" content="{{ $gift->name }} - Lista de Presentes - Lailla e Cristhian">
+    <title>{{ $gift->name }} - Lista de Presentes - Lailla & Cristhian</title>
 
-        <!-- Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
-    <link rel="stylesheet" href="{{ asset('css/wedding.css') }}?v={{ time() }}">
-    </head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <nav class="header-nav">
-            <div class="nav-links">
-                <a href="{{ route('home') }}" class="nav-link">Início</a>
-                <a href="{{ route('home') }}#couple" class="nav-link">Nossa História</a>
-                <a href="{{ route('home') }}#timeline" class="nav-link">O Casamento</a>
-                <a href="{{ route('home') }}#map-location" class="nav-link">Localização</a>
-                <a href="{{ route('gifts.index') }}" class="nav-link">Presentes</a>
-                <a href="{{ route('home') }}#rsvp" class="nav-link">RSVP</a>
-                <a href="{{ route('home') }}#gallery" class="nav-link">Galeria</a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="section-fullscreen section-gift-detail-hero" id="gift-detail-hero">
-        <div class="gift-detail-background">
-            @if($gift->image_url)
-            <img src="{{ $gift->image_url }}" alt="{{ $gift->name }}" class="gift-detail-bg-image">
-            @else
-            <div class="gift-detail-placeholder"></div>
-            @endif
-            <div class="gift-detail-overlay"></div>
-        </div>
-        <div class="container-fullscreen">
-            <div class="gift-detail-hero-content">
-                <h1 class="gift-detail-title">{{ $gift->name }}</h1>
-                <p class="gift-detail-price">{{ $gift->formatted_price }}</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gift Details Section -->
-    <section class="section-fullscreen section-gift-detail" id="gift-detail">
-        <div class="container-fullscreen">
-            <div class="gift-detail-layout">
-                <!-- Gift Image -->
-                <div class="gift-detail-image-wrapper">
-                    @if($gift->image_url)
-                    <img src="{{ $gift->image_url }}" alt="{{ $gift->name }}" class="gift-detail-image">
-                    @else
-                    <div class="gift-detail-image-placeholder">
-                        <i class="bi bi-gift"></i>
-                    </div>
-                    @endif
-                    @if($gift->is_purchased)
-                    <div class="gift-detail-purchased-badge">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>Já foi presenteado</span>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Gift Info -->
-                <div class="gift-detail-info">
-                    <div class="gift-detail-status {{ $gift->is_purchased ? 'purchased' : 'available' }}">
-                        {{ $gift->is_purchased ? 'Presenteado' : 'Disponível' }}
-                    </div>
-
-                    <h2 class="gift-detail-name">{{ $gift->name }}</h2>
-
-                    <p class="gift-detail-description">{{ $gift->description }}</p>
-
-                    <!-- Price Box -->
-                    <div class="gift-detail-price-box">
-                        <p class="gift-detail-price-label">Valor do presente</p>
-                        <h3 class="gift-detail-price-value">{{ $gift->formatted_price }}</h3>
-                    </div>
-
-                    @if($gift->is_purchased)
-                    <!-- Purchased Info -->
-                    <div class="gift-detail-purchased-info">
-                        <i class="bi bi-heart-fill"></i>
-                        <h4>Este presente já foi escolhido!</h4>
-                        <p class="gift-detail-purchased-by">
-                            <strong>Presenteado por:</strong> {{ $gift->purchased_by }}
-                        </p>
-                        <p class="gift-detail-purchased-date">
-                            Em {{ $gift->purchased_at->format('d/m/Y \à\s H:i') }}
-                        </p>
-                        <a href="{{ route('gifts.index') }}" class="gift-detail-back-btn">
-                            <i class="bi bi-arrow-left"></i> Ver outros presentes
-                        </a>
-                    </div>
-                    @else
-                    <!-- Purchase Button -->
-                    <div class="gift-detail-purchase-form">
-                        <h4 class="gift-detail-form-title">
-                            <i class="bi bi-gift"></i> Quero presentear os noivos!
-                        </h4>
-                        
-                        <a href="{{ route('gifts.payment', $gift) }}" class="gift-detail-submit-btn" style="text-decoration: none; display: block;">
-                            <i class="bi bi-gift"></i> Escolher forma de pagamento
-                        </a>
-                        
-                        <form method="POST" action="{{ route('gifts.purchase', $gift) }}" id="purchase-form" style="display: none;">
-                            @csrf
-                            <div class="form-group">
-                                <label for="buyer_name">Seu nome completo *</label>
-                                <input 
-                                    type="text" 
-                                    id="buyer_name" 
-                                    name="buyer_name" 
-                                    required
-                                    placeholder="Digite seu nome completo"
-                                >
-                                @error('buyer_name')
-                                <p class="form-error">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div class="form-info">
-                                <i class="bi bi-info-circle"></i>
-                                <p>Ao clicar em "Confirmar presente", você estará reservando este item. Entre em contato conosco para combinar a forma de entrega.</p>
-                            </div>
-
-                            <button type="submit" class="gift-detail-submit-btn">
-                                <i class="bi bi-heart"></i> Confirmar presente
-                            </button>
-                        </form>
-                    </div>
-
-                    @if($gift->store_url)
-                    <div class="gift-detail-store-link">
-                        <p>Quer ver mais detalhes do produto?</p>
-                        <a href="{{ $gift->store_url }}" target="_blank" class="gift-detail-store-btn">
-                            <i class="bi bi-box-arrow-up-right"></i> Ver na loja
-                        </a>
-                    </div>
-                    @endif
-                    @endif
-
-                    <!-- Back to List -->
-                    <div class="gift-detail-back-section">
-                        <a href="{{ route('gifts.index') }}" class="gift-detail-back-link">
-                            <i class="bi bi-arrow-left"></i> Voltar à lista de presentes
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p class="footer-quote">"All love stories are beautiful, but ours is my favorite"</p>
-            <p class="footer-names">Lailla & Cristhian</p>
-            <p class="footer-date">09 de Maio de 2026</p>
-        </div>
-    </footer>
-
-    <script src="{{ asset('js/wedding.js') }}?v={{ time() }}"></script>
+    <!-- CSS Base -->
+    <link rel="stylesheet" href="{{ asset('css/wedding-new.css') }}?v={{ time() }}">
+    
+    <!-- CSS específico -->
     <style>
-        /* Gift Detail Hero */
-        .section-gift-detail-hero {
+        /* Header always visible */
+        .main-header {
+            background: rgba(45, 74, 45, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Hero */
+        .gift-hero {
             position: relative;
-            padding: 0;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
-            padding-top: 80px;
         }
-
-        .gift-detail-background {
+        
+        .gift-hero-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            inset: 0;
         }
-
-        .gift-detail-bg-image {
+        
+        .gift-hero-bg img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
             filter: grayscale(100%);
         }
-
-        .gift-detail-placeholder {
+        
+        .gift-hero-placeholder {
             width: 100%;
             height: 100%;
-            background: var(--color-dark-green);
+            background: var(--color-primary);
         }
-
-        .gift-detail-overlay {
+        
+        .gift-hero-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: rgba(45, 74, 45, 0.5);
-            z-index: 1;
         }
-
-        .gift-detail-hero-content {
+        
+        .gift-hero-content {
             position: relative;
-            z-index: 2;
+            z-index: 10;
             text-align: center;
+            padding: var(--spacing-2xl);
         }
-
-        .gift-detail-title {
-            font-family: var(--font-names);
-            font-size: 5rem;
+        
+        .gift-hero-title {
+            font-size: clamp(2rem, 6vw, 4rem);
             color: var(--color-cream);
-            margin-bottom: 1rem;
-            font-weight: 600;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: var(--spacing-sm);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
-
-        .gift-detail-price {
-            font-family: var(--font-text);
-            font-size: 2rem;
+        
+        .gift-hero-price {
+            font-size: clamp(1.3rem, 3vw, 2rem);
             color: var(--color-cream);
             opacity: 0.95;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
         }
-
-        /* Gift Detail Section */
-        .section-gift-detail {
+        
+        /* Detail Section */
+        .gift-detail {
             background: var(--color-cream);
-            padding: 4rem 2rem;
+            padding: var(--spacing-3xl) var(--spacing-md);
         }
-
-        .gift-detail-layout {
+        
+        .gift-detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: var(--spacing-2xl);
             max-width: 1200px;
             margin: 0 auto;
             align-items: start;
         }
-
-        .gift-detail-image-wrapper {
+        
+        @media (max-width: 1024px) {
+            .gift-detail-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+            }
+        }
+        
+        /* Image Side */
+        .gift-image-side {
             position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-
-        .gift-detail-image {
+        
+        .gift-image-main {
             width: 100%;
-            height: 500px;
+            aspect-ratio: 4/3;
             object-fit: cover;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
             filter: grayscale(100%);
+            transition: filter var(--transition-slow);
         }
-
-        .gift-detail-image-placeholder {
+        
+        .gift-image-main:hover {
+            filter: grayscale(0%);
+        }
+        
+        .gift-image-placeholder {
             width: 100%;
-            height: 500px;
+            aspect-ratio: 4/3;
             background: var(--color-off-white);
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .gift-detail-image-placeholder i {
+        
+        .gift-image-placeholder i {
             font-size: 5rem;
-            color: var(--color-dark-green);
-            opacity: 0.5;
+            color: var(--color-primary);
+            opacity: 0.3;
         }
-
-        .gift-detail-purchased-badge {
+        
+        .gift-purchased-badge {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
             background: rgba(40, 167, 69, 0.95);
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-full);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-text);
+            gap: var(--spacing-xs);
             font-weight: 500;
-            z-index: 1;
+            box-shadow: var(--shadow-md);
         }
-
-        .gift-detail-purchased-badge i {
-            font-size: 1.2rem;
-        }
-
-        .gift-detail-info {
+        
+        /* Info Side */
+        .gift-info-side {
             background: var(--color-off-white);
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
         }
-
-        .gift-detail-status {
+        
+        @media (max-width: 640px) {
+            .gift-info-side {
+                padding: var(--spacing-lg);
+            }
+        }
+        
+        .gift-status {
             display: inline-block;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
-            margin-bottom: 2rem;
-            font-family: var(--font-text);
+            margin-bottom: var(--spacing-md);
         }
-
-        .gift-detail-status.available {
-            background: var(--color-dark-green);
+        
+        .gift-status.available {
+            background: var(--color-primary);
             color: var(--color-cream);
         }
-
-        .gift-detail-status.purchased {
+        
+        .gift-status.purchased {
             background: #28a745;
             color: white;
         }
-
-        .gift-detail-name {
-            font-family: var(--font-names);
-            font-size: 2.5rem;
-            color: var(--color-dark-green);
-            margin-bottom: 1.5rem;
-            font-weight: 600;
+        
+        .gift-name {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
         }
-
-        .gift-detail-description {
-            font-family: var(--font-text);
-            font-size: 1.2rem;
-            color: var(--color-text-dark);
+        
+        .gift-description {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: var(--color-text-light);
             line-height: 1.8;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            margin-bottom: var(--spacing-lg);
         }
-
-        .gift-detail-price-box {
+        
+        /* Price Box */
+        .gift-price-box {
             background: var(--color-cream);
-            padding: 2rem;
-            border-radius: 10px;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
         }
-
-        .gift-detail-price-label {
-            font-family: var(--font-text);
-            font-size: 1rem;
-            color: var(--color-text-dark);
-            opacity: 0.7;
-            margin-bottom: 0.5rem;
+        
+        .gift-price-label {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-xs);
         }
-
-        .gift-detail-price-value {
-            font-family: var(--font-names);
-            font-size: 3rem;
-            color: var(--color-dark-green);
+        
+        .gift-price-value {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--color-primary);
             font-weight: 600;
-            margin: 0;
         }
-
-        .gift-detail-purchased-info {
+        
+        /* Purchased Info */
+        .gift-purchased-info {
             background: rgba(40, 167, 69, 0.1);
             border: 2px solid #28a745;
-            padding: 2.5rem;
-            border-radius: 15px;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
         }
-
-        .gift-detail-purchased-info i {
-            font-size: 3rem;
+        
+        .gift-purchased-info i {
+            font-size: 2.5rem;
             color: #28a745;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-sm);
         }
-
-        .gift-detail-purchased-info h4 {
-            font-family: var(--font-names);
-            font-size: 1.8rem;
+        
+        .gift-purchased-info h4 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
             color: #28a745;
-            margin-bottom: 1rem;
+            margin-bottom: var(--spacing-md);
         }
-
-        .gift-detail-purchased-by {
-            font-family: var(--font-text);
-            font-size: 1.1rem;
-            color: var(--color-text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .gift-detail-purchased-date {
-            font-family: var(--font-text);
-            font-size: 0.95rem;
-            color: var(--color-text-dark);
-            opacity: 0.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .gift-detail-back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 2rem;
-            background: var(--color-dark-green);
-            color: var(--color-cream);
-            border: 2px solid var(--color-dark-green);
-            border-radius: 50px;
-            font-family: var(--font-text);
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .gift-detail-back-btn:hover {
-            background: transparent;
-            color: var(--color-dark-green);
-        }
-
-        .gift-detail-purchase-form {
+        
+        /* Purchase CTA */
+        .gift-purchase-cta {
             background: rgba(45, 74, 45, 0.05);
-            border: 2px solid var(--color-dark-green);
-            padding: 2.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
+            border: 2px solid var(--color-primary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-lg);
         }
-
-        .gift-detail-form-title {
-            font-family: var(--font-names);
-            font-size: 1.8rem;
-            color: var(--color-dark-green);
-            margin-bottom: 2rem;
+        
+        .gift-cta-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            color: var(--color-primary);
             text-align: center;
+            margin-bottom: var(--spacing-md);
         }
-
-        .gift-detail-form-title i {
-            margin-right: 0.5rem;
+        
+        .gift-cta-title i {
+            margin-right: var(--spacing-xs);
         }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-family: var(--font-text);
-            font-size: 1rem;
-            color: var(--color-text-dark);
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid rgba(45, 74, 45, 0.2);
-            border-radius: 10px;
-            font-family: var(--font-text);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--color-dark-green);
-        }
-
-        .form-error {
-            color: #dc3545;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            font-family: var(--font-text);
-        }
-
-        .form-info {
-            background: var(--color-off-white);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+        
+        .gift-cta-btn {
             display: flex;
-            gap: 0.75rem;
-            font-family: var(--font-text);
-            font-size: 0.95rem;
-            color: var(--color-text-dark);
-        }
-
-        .form-info i {
-            color: var(--color-dark-green);
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .gift-detail-submit-btn {
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
             width: 100%;
-            padding: 1.2rem;
-            background: var(--color-dark-green);
+            padding: var(--spacing-md);
+            background: var(--color-primary);
             color: var(--color-cream);
-            border: 2px solid var(--color-dark-green);
-            border-radius: 50px;
-            font-family: var(--font-text);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-full);
             font-size: 1.1rem;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
         }
-
-        .gift-detail-submit-btn:hover {
+        
+        .gift-cta-btn:hover {
             background: transparent;
-            color: var(--color-dark-green);
+            color: var(--color-primary);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(45, 74, 45, 0.3);
+            box-shadow: var(--shadow-md);
         }
-
-        .gift-detail-submit-btn i {
-            margin-right: 0.5rem;
-        }
-
-        .gift-detail-store-link {
+        
+        /* Store Link */
+        .gift-store-link {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: var(--spacing-lg);
         }
-
-        .gift-detail-store-link p {
-            font-family: var(--font-text);
-            font-size: 1rem;
-            color: var(--color-text-dark);
-            opacity: 0.8;
-            margin-bottom: 1rem;
+        
+        .gift-store-link p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-sm);
         }
-
-        .gift-detail-store-btn {
+        
+        .gift-store-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 2rem;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-lg);
             background: transparent;
-            color: var(--color-dark-green);
-            border: 2px solid var(--color-dark-green);
-            border-radius: 50px;
-            font-family: var(--font-text);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-full);
             font-size: 1rem;
             font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
         }
-
-        .gift-detail-store-btn:hover {
-            background: var(--color-dark-green);
+        
+        .gift-store-btn:hover {
+            background: var(--color-primary);
             color: var(--color-cream);
         }
-
-        .gift-detail-back-section {
+        
+        /* Back Link */
+        .gift-back-section {
             border-top: 1px solid rgba(45, 74, 45, 0.1);
-            padding-top: 2rem;
+            padding-top: var(--spacing-md);
             text-align: center;
         }
-
-        .gift-detail-back-link {
+        
+        .gift-back-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-text);
+            gap: var(--spacing-xs);
+            color: var(--color-primary);
             font-size: 1rem;
-            color: var(--color-dark-green);
-            text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
         }
-
-        .gift-detail-back-link:hover {
+        
+        .gift-back-link:hover {
             opacity: 0.7;
         }
-
-        .gift-detail-back-link i {
-            transition: transform 0.3s ease;
-        }
-
-        .gift-detail-back-link:hover i {
+        
+        .gift-back-link:hover i {
             transform: translateX(-5px);
         }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .gift-detail-layout {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .gift-detail-title {
-                font-size: 3.5rem;
-            }
+        
+        .gift-back-link i {
+            transition: transform var(--transition-normal);
         }
-
-        @media (max-width: 768px) {
-            .gift-detail-title {
-                font-size: 2.5rem;
-            }
-
-            .gift-detail-price {
-                font-size: 1.5rem;
-            }
-
-            .gift-detail-info {
-                padding: 2rem;
-            }
-
-            .gift-detail-name {
-                font-size: 2rem;
-            }
-        }
-
-        /* Success/Error Messages */
-        @if(session('success'))
-        .success-message {
+        
+        /* Notifications */
+        .notification {
             position: fixed;
             top: 100px;
             right: 20px;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .notification.success {
             background: #28a745;
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-            animation: slideIn 0.5s ease;
-            font-family: var(--font-text);
         }
-        @endif
-
-        @if(session('error'))
-        .error-message {
-            position: fixed;
-            top: 100px;
-            right: 20px;
+        
+        .notification.error {
             background: #dc3545;
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-            animation: slideIn 0.5s ease;
-            font-family: var(--font-text);
         }
-        @endif
-
+        
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -661,47 +382,195 @@
                 opacity: 1;
             }
         }
+        
+        @media (max-width: 480px) {
+            .notification {
+                left: 20px;
+                right: 20px;
+                top: 80px;
+            }
+        }
     </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header" id="main-header">
+        <nav class="header-nav">
+            <div class="nav-links">
+                <a href="{{ route('home') }}" class="nav-link">Início</a>
+                <a href="{{ route('home') }}#story" class="nav-link">Nossa História</a>
+                <a href="{{ route('home') }}#event" class="nav-link">O Casamento</a>
+                <a href="{{ route('home') }}#map" class="nav-link">Localização</a>
+                <a href="{{ route('gifts.index') }}" class="nav-link">Presentes</a>
+                <a href="{{ route('home') }}#rsvp" class="nav-link">RSVP</a>
+                <a href="{{ route('home') }}#gallery" class="nav-link">Galeria</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="gift-hero">
+        <div class="gift-hero-bg">
+            @if($gift->image_url)
+            <img src="{{ $gift->image_url }}" alt="{{ $gift->name }}">
+            @else
+            <div class="gift-hero-placeholder"></div>
+            @endif
+            <div class="gift-hero-overlay"></div>
+        </div>
+        
+        <div class="gift-hero-content">
+            <h1 class="gift-hero-title">{{ $gift->name }}</h1>
+            <p class="gift-hero-price">{{ $gift->formatted_price }}</p>
+        </div>
+    </section>
+
+    <!-- Detail Section -->
+    <section class="gift-detail">
+        <div class="gift-detail-grid">
+            <!-- Image Side -->
+            <div class="gift-image-side reveal">
+                @if($gift->image_url)
+                <img src="{{ $gift->image_url }}" alt="{{ $gift->name }}" class="gift-image-main">
+                @else
+                <div class="gift-image-placeholder">
+                    <i class="bi bi-gift"></i>
+                </div>
+                @endif
+                
+                @if($gift->is_purchased)
+                <div class="gift-purchased-badge">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Já foi presenteado</span>
+                </div>
+                @endif
+            </div>
+            
+            <!-- Info Side -->
+            <div class="gift-info-side reveal">
+                <span class="gift-status {{ $gift->is_purchased ? 'purchased' : 'available' }}">
+                    {{ $gift->is_purchased ? 'Presenteado' : 'Disponível' }}
+                </span>
+                
+                <h2 class="gift-name">{{ $gift->name }}</h2>
+                
+                <p class="gift-description">{{ $gift->description }}</p>
+                
+                <!-- Price Box -->
+                <div class="gift-price-box">
+                    <p class="gift-price-label">Valor do presente</p>
+                    <p class="gift-price-value">{{ $gift->formatted_price }}</p>
+                </div>
+                
+                @if($gift->is_purchased)
+                <!-- Purchased Info -->
+                <div class="gift-purchased-info">
+                    <i class="bi bi-heart-fill"></i>
+                    <h4>Este presente já foi escolhido!</h4>
+                    <a href="{{ route('gifts.index') }}" class="gift-cta-btn">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Ver outros presentes</span>
+                    </a>
+                </div>
+                @else
+                <!-- Purchase CTA -->
+                <div class="gift-purchase-cta">
+                    <h4 class="gift-cta-title">
+                        <i class="bi bi-gift"></i>
+                        Quero presentear os noivos!
+                    </h4>
+                    <a href="{{ route('gifts.payment', $gift) }}" class="gift-cta-btn">
+                        <i class="bi bi-credit-card"></i>
+                        <span>Escolher forma de pagamento</span>
+                    </a>
+                </div>
+                
+                @if($gift->store_url)
+                <div class="gift-store-link">
+                    <p>Quer ver mais detalhes do produto?</p>
+                    <a href="{{ $gift->store_url }}" target="_blank" class="gift-store-btn">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        <span>Ver na loja</span>
+                    </a>
+                </div>
+                @endif
+                @endif
+                
+                <!-- Back Link -->
+                <div class="gift-back-section">
+                    <a href="{{ route('gifts.index') }}" class="gift-back-link">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Voltar à lista de presentes</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-quote">"All love stories are beautiful, but ours is my favorite"</p>
+            
+            <div class="footer-names">
+                <h3>Lailla</h3>
+                <span class="text-script">&</span>
+                <h3>Cristhian</h3>
+            </div>
+            
+            <p class="footer-date">09 de Maio de 2026</p>
+            
+            <div class="footer-divider">
+                <p class="footer-copyright">© 2025 Lailla & Cristhian. Feito com ❤️ para nosso grande dia.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notifications -->
     @if(session('success'))
-    <div class="success-message">
-        <i class="bi bi-check-circle"></i> {{ session('success') }}
+    <div class="notification success">
+        <i class="bi bi-check-circle"></i>
+        <span>{{ session('success') }}</span>
     </div>
     @endif
 
     @if(session('error'))
-    <div class="error-message">
-        <i class="bi bi-exclamation-circle"></i> {{ session('error') }}
+    <div class="notification error">
+        <i class="bi bi-exclamation-circle"></i>
+        <span>{{ session('error') }}</span>
     </div>
     @endif
-    <script>
-        // Hide success/error messages after 5 seconds
-        setTimeout(() => {
-            const messages = document.querySelectorAll('.success-message, .error-message');
-            messages.forEach(message => {
-                message.style.animation = 'slideIn 0.5s ease reverse';
-                setTimeout(() => {
-                    message.remove();
-                }, 500);
-            });
-        }, 5000);
 
-        // Form validation
-        document.getElementById('purchase-form')?.addEventListener('submit', function(e) {
-            const nameInput = document.getElementById('buyer_name');
-            if (!nameInput.value.trim()) {
-                e.preventDefault();
-                alert('Por favor, digite seu nome completo.');
-                nameInput.focus();
-                return false;
-            }
-            
-            // Confirm before submitting
-            const confirmed = confirm('Confirma que deseja presentear os noivos com este item?');
-            if (!confirmed) {
-                e.preventDefault();
-                return false;
-            }
+    <!-- JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide notifications after 5 seconds
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.5s ease reverse';
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
         });
+
+        // Reveal on scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        });
+        
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+    });
     </script>
-    </body>
+</body>
 </html>
