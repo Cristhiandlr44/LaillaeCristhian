@@ -43,8 +43,32 @@
             --gray-800: #212529;
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        section {
+            width: 100%;
+            max-width: 100vw;
         }
 
         /* Header transparent */
@@ -52,6 +76,8 @@
             background: transparent;
             backdrop-filter: blur(10px);
             box-shadow: none;
+            width: 100%;
+            max-width: 100vw;
         }
         
         .main-header.scrolled {
@@ -65,6 +91,16 @@
         
         .main-header.scrolled .nav-link {
             color: var(--black);
+        }
+
+        @media (max-width: 640px) {
+            .header-nav {
+                padding: 0 0.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
         }
         
         /* Hero */
@@ -125,20 +161,26 @@
 
         @media (max-width: 640px) {
             .gift-hero {
-                min-height: 35vh;
+                min-height: 30vh;
+                width: 100%;
+                max-width: 100vw;
             }
 
             .gift-hero-content {
                 padding: 1rem;
+                width: 100%;
+                max-width: 100%;
             }
 
             .gift-hero-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 line-height: 1.3;
+                word-wrap: break-word;
+                padding: 0 0.5rem;
             }
 
             .gift-hero-price {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
         }
         
@@ -168,10 +210,15 @@
             .gift-detail {
                 padding: 0;
                 background: var(--white);
+                width: 100%;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
 
             .gift-detail-grid {
                 gap: 0;
+                width: 100%;
+                max-width: 100%;
             }
         }
         
@@ -230,17 +277,21 @@
             .gift-image-side {
                 margin: 0;
                 width: 100%;
+                max-width: 100%;
             }
 
             .gift-image-main {
                 border-radius: 0;
                 aspect-ratio: 1/1;
                 width: 100%;
+                max-width: 100%;
+                display: block;
             }
 
             .gift-image-placeholder {
                 border-radius: 0;
                 aspect-ratio: 1/1;
+                width: 100%;
             }
 
             .gift-purchased-badge {
@@ -261,10 +312,12 @@
         
         @media (max-width: 640px) {
             .gift-info-side {
-                padding: 1.5rem 1rem;
+                padding: 1.25rem 1rem;
                 border-radius: 0;
                 margin: 0;
                 box-shadow: none;
+                width: 100%;
+                max-width: 100%;
             }
         }
         
@@ -311,15 +364,18 @@
             }
 
             .gift-name {
-                font-size: 1.35rem;
+                font-size: 1.25rem;
                 margin-bottom: 0.5rem;
                 line-height: 1.3;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
             .gift-description {
                 font-size: 0.9rem;
                 line-height: 1.6;
                 margin-bottom: 1rem;
+                word-wrap: break-word;
             }
         }
         
@@ -347,9 +403,11 @@
 
         @media (max-width: 640px) {
             .gift-price-box {
-                padding: 1rem;
+                padding: 0.875rem;
                 margin-bottom: 1rem;
                 border-radius: 8px;
+                width: 100%;
+                max-width: 100%;
             }
 
             .gift-price-label {
@@ -357,7 +415,7 @@
             }
 
             .gift-price-value {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
         }
         
@@ -389,14 +447,16 @@
                 padding: 1rem;
                 margin-bottom: 1rem;
                 border-radius: 8px;
+                width: 100%;
+                max-width: 100%;
             }
 
             .gift-purchased-info i {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
 
             .gift-purchased-info h4 {
-                font-size: 1rem;
+                font-size: 0.95rem;
                 margin-bottom: 0.75rem;
             }
         }
@@ -427,10 +487,12 @@
                 padding: 1rem;
                 margin-bottom: 1rem;
                 border-radius: 8px;
+                width: 100%;
+                max-width: 100%;
             }
 
             .gift-cta-title {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
                 margin-bottom: 0.75rem;
             }
         }
@@ -461,13 +523,22 @@
 
         @media (max-width: 640px) {
             .gift-cta-btn {
-                padding: 0.875rem 1rem;
-                font-size: 0.9rem;
-                gap: 0.4rem;
+                padding: 0.75rem 0.875rem;
+                font-size: 0.85rem;
+                gap: 0.35rem;
+                width: 100%;
+                max-width: 100%;
             }
 
             .gift-cta-btn i {
-                font-size: 1rem;
+                font-size: 0.9rem;
+                flex-shrink: 0;
+            }
+
+            .gift-cta-btn span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
         
@@ -506,6 +577,7 @@
         @media (max-width: 640px) {
             .gift-store-link {
                 margin-bottom: 1rem;
+                width: 100%;
             }
 
             .gift-store-link p {
@@ -513,8 +585,8 @@
             }
 
             .gift-store-btn {
-                font-size: 0.85rem;
-                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+                padding: 0.45rem 0.875rem;
             }
         }
         
@@ -657,12 +729,15 @@
 
         @media (max-width: 640px) {
             .footer {
-                padding: 2rem 1rem;
+                padding: 1.5rem 1rem;
+                width: 100%;
+                max-width: 100vw;
             }
 
             .footer-quote {
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
+                font-size: 0.85rem;
+                margin-bottom: 0.75rem;
+                padding: 0 0.5rem;
             }
 
             .footer-names {
@@ -670,20 +745,20 @@
             }
 
             .footer-names h3 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
 
             .footer-names .text-script {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
 
             .footer-date {
-                font-size: 0.95rem;
-                margin-bottom: 1.5rem;
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
             }
 
             .footer-copyright {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
         }
     </style>
