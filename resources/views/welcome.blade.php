@@ -119,7 +119,7 @@
                                     <i class="bi bi-calendar-event"></i>
                                     <div class="event-info-text">
                                         <span>09 de Maio de 2026</span>
-                                        <small>Sexta-feira</small>
+                                        <small>Sábado</small>
                                     </div>
                                 </div>
                                 <div class="event-info-item">
