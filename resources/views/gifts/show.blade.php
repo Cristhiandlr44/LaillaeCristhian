@@ -489,6 +489,7 @@
             color: var(--black);
             text-align: center;
             margin-bottom: 1rem;
+            text-transform: none;
         }
         
         .gift-cta-title i {
@@ -504,9 +505,10 @@
             }
 
             .gift-cta-title {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 margin-bottom: 0.5rem;
-                line-height: 1.3;
+                line-height: 1.4;
+                text-transform: none !important;
             }
 
             .gift-cta-title i {
@@ -846,7 +848,7 @@
                 <!-- Purchased Info -->
                 <div class="gift-purchased-info">
                     <i class="bi bi-heart-fill"></i>
-                    <h4>Este presente já foi escolhido!</h4>
+                    <h4 style="text-transform: none;">Este presente já foi escolhido!</h4>
                     <a href="{{ route('gifts.index') }}" class="gift-cta-btn">
                         <i class="bi bi-arrow-left"></i>
                         <span>Ver outros presentes</span>
@@ -855,7 +857,7 @@
                 @else
                 <!-- Purchase CTA -->
                 <div class="gift-purchase-cta">
-                    <h4 class="gift-cta-title">
+                    <h4 class="gift-cta-title" style="text-transform: none;">
                         <i class="bi bi-gift"></i>
                         Quero presentear os noivos!
                     </h4>
