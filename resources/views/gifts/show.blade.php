@@ -109,7 +109,7 @@
         }
         
         .gift-hero-title {
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-size: clamp(1.5rem, 6vw, 4rem);
             color: var(--white);
             margin-bottom: var(--spacing-sm);
             text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
@@ -117,10 +117,29 @@
         }
         
         .gift-hero-price {
-            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-size: clamp(1.1rem, 3vw, 2rem);
             color: var(--white);
             opacity: 0.95;
             text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 640px) {
+            .gift-hero {
+                min-height: 35vh;
+            }
+
+            .gift-hero-content {
+                padding: 1rem;
+            }
+
+            .gift-hero-title {
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+
+            .gift-hero-price {
+                font-size: 1.1rem;
+            }
         }
         
         /* Detail Section */
@@ -142,6 +161,16 @@
             .gift-detail-grid {
                 grid-template-columns: 1fr;
                 gap: var(--spacing-xl);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .gift-detail {
+                padding: 1.5rem 1rem;
+            }
+
+            .gift-detail-grid {
+                gap: 1.5rem;
             }
         }
         
@@ -195,6 +224,25 @@
             box-shadow: var(--shadow-md);
         }
         
+        /* Image Side - Mobile */
+        @media (max-width: 640px) {
+            .gift-image-side {
+                margin: 0 -1rem;
+            }
+
+            .gift-image-main {
+                border-radius: 0;
+                aspect-ratio: 16/10;
+            }
+
+            .gift-purchased-badge {
+                top: 0.75rem;
+                right: 0.75rem;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
+
         /* Info Side */
         .gift-info-side {
             background: var(--white);
@@ -205,7 +253,10 @@
         
         @media (max-width: 640px) {
             .gift-info-side {
-                padding: var(--spacing-lg);
+                padding: 1.25rem;
+                border-radius: 0;
+                margin: 0 -1rem;
+                box-shadow: none;
             }
         }
         
@@ -230,17 +281,36 @@
         }
         
         .gift-name {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             color: var(--black);
             margin-bottom: var(--spacing-md);
             font-family: 'Cormorant Garamond', Georgia, serif;
+            line-height: 1.2;
         }
         
         .gift-description {
-            font-size: clamp(1rem, 2vw, 1.15rem);
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
             color: var(--gray-600);
-            line-height: 1.8;
+            line-height: 1.7;
             margin-bottom: var(--spacing-lg);
+        }
+
+        @media (max-width: 640px) {
+            .gift-status {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.75rem;
+            }
+
+            .gift-name {
+                font-size: 1.4rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .gift-description {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            }
         }
         
         /* Price Box */
@@ -260,9 +330,24 @@
         
         .gift-price-value {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: clamp(1.75rem, 5vw, 3rem);
             color: var(--black);
             font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .gift-price-box {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .gift-price-label {
+                font-size: 0.85rem;
+            }
+
+            .gift-price-value {
+                font-size: 1.75rem;
+            }
         }
         
         /* Purchased Info */
@@ -288,6 +373,22 @@
             margin-bottom: var(--spacing-md);
         }
         
+        /* Purchased Info - Mobile */
+        @media (max-width: 640px) {
+            .gift-purchased-info {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .gift-purchased-info i {
+                font-size: 2rem;
+            }
+
+            .gift-purchased-info h4 {
+                font-size: 1.1rem;
+            }
+        }
+
         /* Purchase CTA */
         .gift-purchase-cta {
             background: var(--gray-100);
@@ -299,7 +400,7 @@
         
         .gift-cta-title {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
             color: var(--black);
             text-align: center;
             margin-bottom: var(--spacing-md);
@@ -307,6 +408,18 @@
         
         .gift-cta-title i {
             margin-right: var(--spacing-xs);
+        }
+
+        @media (max-width: 640px) {
+            .gift-purchase-cta {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .gift-cta-title {
+                font-size: 1rem;
+                margin-bottom: 0.75rem;
+            }
         }
         
         .gift-cta-btn {
@@ -331,6 +444,13 @@
             color: var(--black);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 640px) {
+            .gift-cta-btn {
+                padding: 0.875rem 1rem;
+                font-size: 0.95rem;
+            }
         }
         
         /* Store Link */
@@ -364,6 +484,21 @@
             background: var(--black);
             color: var(--white);
         }
+
+        @media (max-width: 640px) {
+            .gift-store-link {
+                margin-bottom: 1rem;
+            }
+
+            .gift-store-link p {
+                font-size: 0.85rem;
+            }
+
+            .gift-store-btn {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
         
         /* Back Link */
         .gift-back-section {
@@ -392,6 +527,16 @@
         
         .gift-back-link i {
             transition: transform var(--transition-normal);
+        }
+
+        @media (max-width: 640px) {
+            .gift-back-section {
+                padding-top: 1rem;
+            }
+
+            .gift-back-link {
+                font-size: 0.9rem;
+            }
         }
         
         /* Notifications */
@@ -489,6 +634,38 @@
         .footer-copyright {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 640px) {
+            .footer {
+                padding: 2rem 1rem;
+            }
+
+            .footer-quote {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .footer-names {
+                gap: 0.5rem;
+            }
+
+            .footer-names h3 {
+                font-size: 1.5rem;
+            }
+
+            .footer-names .text-script {
+                font-size: 1.2rem;
+            }
+
+            .footer-date {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .footer-copyright {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>

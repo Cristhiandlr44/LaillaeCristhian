@@ -313,17 +313,63 @@
             font-size: 0.85em;
             opacity: 0.8;
         }
+
+        /* Mobile Filter Toggle */
+        .filter-toggle {
+            display: none;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .filter-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .filter-toggle.active i {
+            transform: rotate(180deg);
+        }
         
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
+            .filter-toggle {
+                display: flex;
+            }
+
             .filter-buttons {
+                display: none;
                 flex-direction: column;
                 align-items: center;
+                gap: 0.75rem;
+                padding-top: 0.5rem;
+            }
+
+            .filter-buttons.show {
+                display: flex;
+                animation: fadeIn 0.3s ease;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
             
             .filter-btn {
                 width: 100%;
-                max-width: 280px;
+                max-width: 300px;
                 justify-content: center;
+                padding: 0.875rem 1.5rem;
             }
         }
 
@@ -347,12 +393,45 @@
             .gifts-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
+                padding: 0;
+            }
+
+            .gifts-grid-section {
+                padding: 0 1rem 3rem;
             }
         }
         
-        @media (max-width: 400px) {
+        @media (max-width: 500px) {
             .gifts-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
+            }
+
+            .gifts-grid-section {
+                padding: 0 0.5rem 2rem;
+            }
+
+            .gift-card {
+                border-radius: 10px;
+            }
+
+            .gift-info {
+                padding: 0.75rem;
+            }
+
+            .gift-name {
+                font-size: 0.9rem;
+                line-height: 1.3;
+                margin-bottom: 0.25rem;
+            }
+
+            .gift-price {
+                font-size: 1rem;
+            }
+
+            .gift-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
             }
         }
         
@@ -1287,7 +1366,14 @@
                 <h2 class="filter-title">Encontre o presente perfeito</h2>
             </div>
             
-            <div class="filter-buttons" data-aos="fade-up" data-aos-delay="100">
+            <!-- Mobile Filter Toggle -->
+            <button class="filter-toggle" id="filterToggle" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-filter"></i>
+                <span>Filtrar Presentes</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="filter-buttons" id="filterButtons" data-aos="fade-up" data-aos-delay="100">
                 <a href="{{ route('gifts.index', array_merge(request()->except('filter'), ['filter' => 'all'])) }}#gifts-filter" class="filter-btn {{ $filter === 'all' ? 'active' : '' }}">
                     <i class="fas fa-th-large"></i>
                     <span>Todos</span>
@@ -1711,6 +1797,17 @@
             setTimeout(() => {
                 closeFlash();
             }, 8000);
+        }
+
+        // Filter toggle for mobile
+        const filterToggle = document.getElementById('filterToggle');
+        const filterButtons = document.getElementById('filterButtons');
+        
+        if (filterToggle && filterButtons) {
+            filterToggle.addEventListener('click', function() {
+                filterToggle.classList.toggle('active');
+                filterButtons.classList.toggle('show');
+            });
         }
     </script>
 </body>
