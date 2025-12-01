@@ -145,13 +145,13 @@
         /* Detail Section */
         .gift-detail {
             background: var(--gray-100);
-            padding: var(--spacing-3xl) var(--spacing-md);
+            padding: 3rem 1.5rem;
         }
         
         .gift-detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-2xl);
+            gap: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
             align-items: start;
@@ -160,17 +160,18 @@
         @media (max-width: 1024px) {
             .gift-detail-grid {
                 grid-template-columns: 1fr;
-                gap: var(--spacing-xl);
+                gap: 2rem;
             }
         }
 
         @media (max-width: 640px) {
             .gift-detail {
-                padding: 1.5rem 1rem;
+                padding: 0;
+                background: var(--white);
             }
 
             .gift-detail-grid {
-                gap: 1.5rem;
+                gap: 0;
             }
         }
         
@@ -227,47 +228,54 @@
         /* Image Side - Mobile */
         @media (max-width: 640px) {
             .gift-image-side {
-                margin: 0 -1rem;
+                margin: 0;
+                width: 100%;
             }
 
             .gift-image-main {
                 border-radius: 0;
-                aspect-ratio: 16/10;
+                aspect-ratio: 1/1;
+                width: 100%;
+            }
+
+            .gift-image-placeholder {
+                border-radius: 0;
+                aspect-ratio: 1/1;
             }
 
             .gift-purchased-badge {
                 top: 0.75rem;
                 right: 0.75rem;
                 padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
         }
 
         /* Info Side */
         .gift-info-side {
             background: var(--white);
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         @media (max-width: 640px) {
             .gift-info-side {
-                padding: 1.25rem;
+                padding: 1.5rem 1rem;
                 border-radius: 0;
-                margin: 0 -1rem;
+                margin: 0;
                 box-shadow: none;
             }
         }
         
         .gift-status {
             display: inline-block;
-            padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--radius-full);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1rem;
         }
         
         .gift-status.available {
@@ -283,7 +291,7 @@
         .gift-name {
             font-size: clamp(1.5rem, 4vw, 2.5rem);
             color: var(--black);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1rem;
             font-family: 'Cormorant Garamond', Georgia, serif;
             line-height: 1.2;
         }
@@ -292,22 +300,24 @@
             font-size: clamp(0.95rem, 2vw, 1.15rem);
             color: var(--gray-600);
             line-height: 1.7;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
 
         @media (max-width: 640px) {
             .gift-status {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.75rem;
-            }
-
-            .gift-name {
-                font-size: 1.4rem;
+                font-size: 0.7rem;
+                padding: 0.35rem 0.75rem;
                 margin-bottom: 0.75rem;
             }
 
+            .gift-name {
+                font-size: 1.35rem;
+                margin-bottom: 0.5rem;
+                line-height: 1.3;
+            }
+
             .gift-description {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
                 line-height: 1.6;
                 margin-bottom: 1rem;
             }
@@ -316,16 +326,16 @@
         /* Price Box */
         .gift-price-box {
             background: var(--gray-100);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border-radius: 10px;
             text-align: center;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
         
         .gift-price-label {
             font-size: 0.9rem;
             color: var(--gray-600);
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: 0.25rem;
         }
         
         .gift-price-value {
@@ -339,14 +349,15 @@
             .gift-price-box {
                 padding: 1rem;
                 margin-bottom: 1rem;
+                border-radius: 8px;
             }
 
             .gift-price-label {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
 
             .gift-price-value {
-                font-size: 1.75rem;
+                font-size: 1.5rem;
             }
         }
         
@@ -354,30 +365,30 @@
         .gift-purchased-info {
             background: var(--gray-100);
             border: 2px solid var(--gray-400);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border-radius: 10px;
             text-align: center;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
         
         .gift-purchased-info i {
             font-size: 2.5rem;
             color: var(--gray-600);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 0.5rem;
         }
         
         .gift-purchased-info h4 {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
             color: var(--gray-700);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1rem;
         }
-        
-        /* Purchased Info - Mobile */
+
         @media (max-width: 640px) {
             .gift-purchased-info {
                 padding: 1rem;
                 margin-bottom: 1rem;
+                border-radius: 8px;
             }
 
             .gift-purchased-info i {
@@ -385,7 +396,8 @@
             }
 
             .gift-purchased-info h4 {
-                font-size: 1.1rem;
+                font-size: 1rem;
+                margin-bottom: 0.75rem;
             }
         }
 
@@ -393,31 +405,32 @@
         .gift-purchase-cta {
             background: var(--gray-100);
             border: 2px solid var(--black);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--spacing-lg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
         }
         
         .gift-cta-title {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
             color: var(--black);
             text-align: center;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1rem;
         }
         
         .gift-cta-title i {
-            margin-right: var(--spacing-xs);
+            margin-right: 0.25rem;
         }
 
         @media (max-width: 640px) {
             .gift-purchase-cta {
                 padding: 1rem;
                 margin-bottom: 1rem;
+                border-radius: 8px;
             }
 
             .gift-cta-title {
-                font-size: 1rem;
+                font-size: 0.95rem;
                 margin-bottom: 0.75rem;
             }
         }
@@ -426,16 +439,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-xs);
+            gap: 0.5rem;
             width: 100%;
-            padding: var(--spacing-md);
+            padding: 1rem;
             background: var(--black);
             color: var(--white);
             border: 2px solid var(--black);
-            border-radius: var(--radius-full);
-            font-size: 1.1rem;
+            border-radius: 50px;
+            font-size: 1rem;
             font-weight: 500;
-            transition: all var(--transition-normal);
+            transition: all 0.3s ease;
             text-decoration: none;
         }
         
@@ -443,40 +456,45 @@
             background: transparent;
             color: var(--black);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
         @media (max-width: 640px) {
             .gift-cta-btn {
                 padding: 0.875rem 1rem;
-                font-size: 0.95rem;
+                font-size: 0.9rem;
+                gap: 0.4rem;
+            }
+
+            .gift-cta-btn i {
+                font-size: 1rem;
             }
         }
         
         /* Store Link */
         .gift-store-link {
             text-align: center;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
         
         .gift-store-link p {
             font-size: 0.95rem;
             color: var(--gray-600);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 0.5rem;
         }
         
         .gift-store-btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--spacing-xs);
-            padding: var(--spacing-sm) var(--spacing-lg);
+            gap: 0.4rem;
+            padding: 0.5rem 1.25rem;
             background: transparent;
             color: var(--black);
             border: 2px solid var(--black);
-            border-radius: var(--radius-full);
+            border-radius: 50px;
             font-size: 1rem;
             font-weight: 500;
-            transition: all var(--transition-normal);
+            transition: all 0.3s ease;
             text-decoration: none;
         }
         
@@ -491,11 +509,11 @@
             }
 
             .gift-store-link p {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
 
             .gift-store-btn {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 padding: 0.5rem 1rem;
             }
         }
@@ -503,17 +521,17 @@
         /* Back Link */
         .gift-back-section {
             border-top: 1px solid var(--gray-300);
-            padding-top: var(--spacing-md);
+            padding-top: 1rem;
             text-align: center;
         }
         
         .gift-back-link {
             display: inline-flex;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: 0.4rem;
             color: var(--black);
             font-size: 1rem;
-            transition: all var(--transition-normal);
+            transition: all 0.3s ease;
             text-decoration: none;
         }
         
@@ -526,16 +544,17 @@
         }
         
         .gift-back-link i {
-            transition: transform var(--transition-normal);
+            transition: transform 0.3s ease;
         }
 
         @media (max-width: 640px) {
             .gift-back-section {
-                padding-top: 1rem;
+                padding-top: 0.75rem;
+                margin-top: 0.5rem;
             }
 
             .gift-back-link {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
         }
         
