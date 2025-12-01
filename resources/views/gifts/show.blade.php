@@ -9,7 +9,18 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Anaktoria Font -->
+    <style>
+        @font-face {
+            font-family: 'Anaktoria';
+            src: url('{{ asset('fonts/Anaktoria.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -19,10 +30,41 @@
     
     <!-- CSS específico -->
     <style>
-        /* Header always visible */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #6c757d;
+            --gray-600: #495057;
+            --gray-700: #343a40;
+            --gray-800: #212529;
+        }
+
+        body {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+        }
+
+        /* Header transparent */
         .main-header {
-            background: rgba(45, 74, 45, 0.95);
+            background: transparent;
             backdrop-filter: blur(10px);
+            box-shadow: none;
+        }
+        
+        .main-header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            color: var(--white);
+        }
+        
+        .main-header.scrolled .nav-link {
+            color: var(--black);
         }
         
         /* Hero */
@@ -50,13 +92,13 @@
         .gift-hero-placeholder {
             width: 100%;
             height: 100%;
-            background: var(--color-primary);
+            background: var(--gray-600);
         }
         
         .gift-hero-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(45, 74, 45, 0.5);
+            background: rgba(0, 0, 0, 0.6);
         }
         
         .gift-hero-content {
@@ -68,21 +110,22 @@
         
         .gift-hero-title {
             font-size: clamp(2rem, 6vw, 4rem);
-            color: var(--color-cream);
+            color: var(--white);
             margin-bottom: var(--spacing-sm);
             text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .gift-hero-price {
             font-size: clamp(1.3rem, 3vw, 2rem);
-            color: var(--color-cream);
+            color: var(--white);
             opacity: 0.95;
             text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
         }
         
         /* Detail Section */
         .gift-detail {
-            background: var(--color-cream);
+            background: var(--gray-100);
             padding: var(--spacing-3xl) var(--spacing-md);
         }
         
@@ -124,7 +167,7 @@
         .gift-image-placeholder {
             width: 100%;
             aspect-ratio: 4/3;
-            background: var(--color-off-white);
+            background: var(--gray-200);
             border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
@@ -133,7 +176,7 @@
         
         .gift-image-placeholder i {
             font-size: 5rem;
-            color: var(--color-primary);
+            color: var(--gray-400);
             opacity: 0.3;
         }
         
@@ -141,7 +184,7 @@
             position: absolute;
             top: var(--spacing-md);
             right: var(--spacing-md);
-            background: rgba(40, 167, 69, 0.95);
+            background: var(--gray-700);
             color: white;
             padding: var(--spacing-sm) var(--spacing-md);
             border-radius: var(--radius-full);
@@ -154,7 +197,7 @@
         
         /* Info Side */
         .gift-info-side {
-            background: var(--color-off-white);
+            background: var(--white);
             padding: var(--spacing-xl);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
@@ -177,31 +220,32 @@
         }
         
         .gift-status.available {
-            background: var(--color-primary);
-            color: var(--color-cream);
+            background: var(--black);
+            color: var(--white);
         }
         
         .gift-status.purchased {
-            background: #28a745;
+            background: var(--gray-500);
             color: white;
         }
         
         .gift-name {
             font-size: clamp(1.8rem, 4vw, 2.5rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-md);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .gift-description {
             font-size: clamp(1rem, 2vw, 1.15rem);
-            color: var(--color-text-light);
+            color: var(--gray-600);
             line-height: 1.8;
             margin-bottom: var(--spacing-lg);
         }
         
         /* Price Box */
         .gift-price-box {
-            background: var(--color-cream);
+            background: var(--gray-100);
             padding: var(--spacing-lg);
             border-radius: var(--radius-md);
             text-align: center;
@@ -210,21 +254,21 @@
         
         .gift-price-label {
             font-size: 0.9rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
             margin-bottom: var(--spacing-xs);
         }
         
         .gift-price-value {
-            font-family: var(--font-heading);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--color-primary);
+            color: var(--black);
             font-weight: 600;
         }
         
         /* Purchased Info */
         .gift-purchased-info {
-            background: rgba(40, 167, 69, 0.1);
-            border: 2px solid #28a745;
+            background: var(--gray-100);
+            border: 2px solid var(--gray-400);
             padding: var(--spacing-lg);
             border-radius: var(--radius-md);
             text-align: center;
@@ -233,30 +277,30 @@
         
         .gift-purchased-info i {
             font-size: 2.5rem;
-            color: #28a745;
+            color: var(--gray-600);
             margin-bottom: var(--spacing-sm);
         }
         
         .gift-purchased-info h4 {
-            font-family: var(--font-heading);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            color: #28a745;
+            color: var(--gray-700);
             margin-bottom: var(--spacing-md);
         }
         
         /* Purchase CTA */
         .gift-purchase-cta {
-            background: rgba(45, 74, 45, 0.05);
-            border: 2px solid var(--color-primary);
+            background: var(--gray-100);
+            border: 2px solid var(--black);
             padding: var(--spacing-lg);
             border-radius: var(--radius-md);
             margin-bottom: var(--spacing-lg);
         }
         
         .gift-cta-title {
-            font-family: var(--font-heading);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            color: var(--color-primary);
+            color: var(--black);
             text-align: center;
             margin-bottom: var(--spacing-md);
         }
@@ -272,18 +316,19 @@
             gap: var(--spacing-xs);
             width: 100%;
             padding: var(--spacing-md);
-            background: var(--color-primary);
-            color: var(--color-cream);
-            border: 2px solid var(--color-primary);
+            background: var(--black);
+            color: var(--white);
+            border: 2px solid var(--black);
             border-radius: var(--radius-full);
             font-size: 1.1rem;
             font-weight: 500;
             transition: all var(--transition-normal);
+            text-decoration: none;
         }
         
         .gift-cta-btn:hover {
             background: transparent;
-            color: var(--color-primary);
+            color: var(--black);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
@@ -296,7 +341,7 @@
         
         .gift-store-link p {
             font-size: 0.95rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
             margin-bottom: var(--spacing-sm);
         }
         
@@ -306,22 +351,23 @@
             gap: var(--spacing-xs);
             padding: var(--spacing-sm) var(--spacing-lg);
             background: transparent;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
+            color: var(--black);
+            border: 2px solid var(--black);
             border-radius: var(--radius-full);
             font-size: 1rem;
             font-weight: 500;
             transition: all var(--transition-normal);
+            text-decoration: none;
         }
         
         .gift-store-btn:hover {
-            background: var(--color-primary);
-            color: var(--color-cream);
+            background: var(--black);
+            color: var(--white);
         }
         
         /* Back Link */
         .gift-back-section {
-            border-top: 1px solid rgba(45, 74, 45, 0.1);
+            border-top: 1px solid var(--gray-300);
             padding-top: var(--spacing-md);
             text-align: center;
         }
@@ -330,9 +376,10 @@
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-xs);
-            color: var(--color-primary);
+            color: var(--black);
             font-size: 1rem;
             transition: all var(--transition-normal);
+            text-decoration: none;
         }
         
         .gift-back-link:hover {
@@ -363,12 +410,12 @@
         }
         
         .notification.success {
-            background: #28a745;
+            background: var(--gray-700);
             color: white;
         }
         
         .notification.error {
-            background: #dc3545;
+            background: var(--gray-800);
             color: white;
         }
         
@@ -389,6 +436,59 @@
                 right: 20px;
                 top: 80px;
             }
+        }
+
+        /* Footer */
+        .footer {
+            background: #424242;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .footer-quote {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .footer-names {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-names h3 {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        .footer-names .text-script {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-date {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
@@ -544,6 +644,20 @@
     <!-- JavaScript -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        
+        function updateHeader() {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+        
+        window.addEventListener('scroll', updateHeader);
+        updateHeader();
+
         // Hide notifications after 5 seconds
         const notifications = document.querySelectorAll('.notification');
         notifications.forEach(notification => {

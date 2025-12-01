@@ -4,17 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\Gift;
 use App\Services\MercadoPagoService;
+use App\Mail\GiftPurchasedNotification;
+use App\Mail\GiftPurchaseConfirmation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class GiftController extends Controller
 {
     public function index()
     {
-        $gifts = Gift::orderBy('price')->get();
-        $availableGifts = Gift::available()->orderBy('price')->get();
-        $purchasedGifts = Gift::purchased()->orderBy('purchased_at', 'desc')->get();
+        // Paginação: 12 itens por página
+        $perPage = 12;
         
-        return view('gifts.index', compact('gifts', 'availableGifts', 'purchasedGifts'));
+        // Filtro por status
+        $filter = request('filter', 'all');
+        
+        // Ordenação
+        $sort = request('sort', 'random');
+        
+        // Query base
+        $query = Gift::query();
+        
+        // Aplicar filtro
+        if ($filter === 'available') {
+            $query->where('is_purchased', false);
+        } elseif ($filter === 'purchased') {
+            $query->where('is_purchased', true);
+        }
+        
+        // Aplicar ordenação
+        if ($sort === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            // Ordenação aleatória (padrão)
+            $query->inRandomOrder();
+        }
+        
+        // Paginar resultados
+        $gifts = $query->paginate($perPage)->withQueryString();
+        
+        // Contagens para os filtros
+        $totalGifts = Gift::count();
+        $availableGifts = Gift::available()->count();
+        $purchasedGifts = Gift::purchased()->count();
+        
+        return view('gifts.index', compact('gifts', 'totalGifts', 'availableGifts', 'purchasedGifts', 'filter', 'sort'));
     }
 
     public function show(Gift $gift)
@@ -39,18 +75,29 @@ class GiftController extends Controller
 
         $request->validate([
             'buyer_name' => 'required|string|max:255',
+            'buyer_email' => 'required|email|max:255',
+            'buyer_message' => 'nullable|string|max:500',
             'payment_method' => 'required|in:pix,card',
         ]);
 
-        // Se for PIX, apenas salva o nome e marca como comprado
+        // Se for PIX, tenta enviar os emails primeiro
         if ($request->payment_method === 'pix') {
-            $gift->update([
-                'is_purchased' => true,
-                'purchased_by' => $request->buyer_name,
-                'purchased_at' => now(),
-            ]);
-
-            return redirect()->route('gifts.index')->with('success', 'Obrigado por presentear os noivos!');
+            // Tentar enviar emails primeiro
+            $emailResult = $this->sendPurchaseEmails($gift, $request->buyer_name, $request->buyer_email, 'pix', $request->buyer_message);
+            
+            if ($emailResult['success']) {
+                // Só marca como comprado se o email foi enviado com sucesso
+                $gift->update([
+                    'is_purchased' => true,
+                    'purchased_by' => $request->buyer_name,
+                    'purchased_at' => now(),
+                ]);
+                
+                return redirect()->route('gifts.index')->with('success', 'Obrigado por presentear os noivos! Você receberá um email de confirmação.');
+            } else {
+                // Se o email falhou, não marca como comprado e informa o usuário
+                return redirect()->back()->with('error', 'Ocorreu um erro ao processar seu presente. Por favor, entre em contato com os noivos pelo WhatsApp ou tente novamente mais tarde.');
+            }
         }
 
         // Se for cartão, cria preferência e redireciona para Mercado Pago
@@ -89,7 +136,9 @@ class GiftController extends Controller
                     'binary_mode' => false, // Desabilitar modo binário para permitir estados intermediários
                     'metadata' => [
                         'gift_id' => $gift->id,
-                        'buyer_name' => $request->buyer_name
+                        'buyer_name' => $request->buyer_name,
+                        'buyer_email' => $request->buyer_email,
+                        'buyer_message' => $request->buyer_message ?? ''
                     ],
                     // Adicionar locale para evitar erros JavaScript no checkout
                     'site_id' => 'MLB', // Brasil
@@ -254,8 +303,10 @@ class GiftController extends Controller
         $status = $request->query('status');
         $preferenceId = $request->query('preference_id');
 
-        // Buscar o nome do comprador do metadata através do external_reference
+        // Buscar o nome, email e mensagem do comprador do metadata através do external_reference
         $buyerName = 'Cliente';
+        $buyerEmail = null;
+        $buyerMessage = null;
         
         if ($paymentId) {
             // Verificar o pagamento no Mercado Pago
@@ -263,13 +314,15 @@ class GiftController extends Controller
             $payment = $mercadoPagoService->getPaymentStatus($paymentId);
 
             if ($payment && isset($payment['status']) && $payment['status'] === 'approved') {
-                // Buscar o nome do comprador do metadata
+                // Buscar o nome, email e mensagem do comprador do metadata
                 if (isset($payment['metadata']['buyer_name'])) {
                     $buyerName = $payment['metadata']['buyer_name'];
-                } elseif (isset($payment['external_reference'])) {
-                    // Tentar buscar do external_reference se não tiver no metadata
-                    $externalRef = $payment['external_reference'];
-                    // O external_reference contém o gift_id, podemos buscar o nome de outra forma
+                }
+                if (isset($payment['metadata']['buyer_email'])) {
+                    $buyerEmail = $payment['metadata']['buyer_email'];
+                }
+                if (isset($payment['metadata']['buyer_message'])) {
+                    $buyerMessage = $payment['metadata']['buyer_message'];
                 }
                 
                 // Marcar presente como comprado
@@ -279,9 +332,22 @@ class GiftController extends Controller
                         'purchased_by' => $buyerName,
                         'purchased_at' => now(),
                     ]);
+                    
+                    // Enviar emails apenas se tiver o email do comprador
+                    if ($buyerEmail) {
+                        $emailResult = $this->sendPurchaseEmails($gift, $buyerName, $buyerEmail, 'card', $buyerMessage);
+                    } else {
+                        // Envia apenas para os noivos se não tiver email do comprador
+                        $emailResult = $this->sendNotificationToCouple($gift, $buyerName, 'card', $buyerMessage);
+                    }
+                    
+                    // Para cartão, o pagamento já foi aprovado, então mesmo que o email falhe, a compra está confirmada
+                    if (!$emailResult['success']) {
+                        return redirect()->route('gifts.index')->with('warning', 'Pagamento aprovado! Mas houve um erro ao enviar o email de confirmação. Entre em contato com os noivos.');
+                    }
                 }
 
-                return redirect()->route('gifts.index')->with('success', 'Pagamento aprovado! Obrigado por presentear os noivos!');
+                return redirect()->route('gifts.index')->with('success', 'Pagamento aprovado! Obrigado por presentear os noivos! Você receberá um email de confirmação.');
             }
         }
 
@@ -337,11 +403,21 @@ class GiftController extends Controller
                         
                         if ($gift && !$gift->is_purchased) {
                             $buyerName = $payment['metadata']['buyer_name'] ?? 'Cliente';
+                            $buyerEmail = $payment['metadata']['buyer_email'] ?? null;
+                            $buyerMessage = $payment['metadata']['buyer_message'] ?? null;
+                            
                             $gift->update([
                                 'is_purchased' => true,
                                 'purchased_by' => $buyerName,
                                 'purchased_at' => now(),
                             ]);
+                            
+                            // Enviar emails (para webhook, apenas logamos erros pois o pagamento já foi aprovado)
+                            if ($buyerEmail) {
+                                $this->sendPurchaseEmails($gift, $buyerName, $buyerEmail, 'card', $buyerMessage);
+                            } else {
+                                $this->sendNotificationToCouple($gift, $buyerName, 'card', $buyerMessage);
+                            }
                         }
                     }
                 }
@@ -368,5 +444,82 @@ class GiftController extends Controller
         ]);
 
         return redirect()->route('gifts.index')->with('success', 'Obrigado por presentear os noivos!');
+    }
+
+    /**
+     * Envia emails de notificação para os noivos e confirmação para o comprador
+     * @return array ['success' => bool, 'error' => string|null]
+     */
+    private function sendPurchaseEmails(Gift $gift, string $buyerName, string $buyerEmail, string $paymentMethod, ?string $buyerMessage = null): array
+    {
+        try {
+            // Email para os noivos (suporta múltiplos emails separados por vírgula)
+            $coupleEmails = env('COUPLE_EMAIL', 'laillaecristhian@gmail.com');
+            $emailList = array_map('trim', explode(',', $coupleEmails));
+            
+            foreach ($emailList as $email) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($email)->send(new GiftPurchasedNotification($gift, $buyerName, $paymentMethod, $buyerMessage));
+                }
+            }
+            
+            // Email de confirmação para o comprador
+            Mail::to($buyerEmail)->send(new GiftPurchaseConfirmation($gift, $buyerName, $buyerEmail, $paymentMethod));
+            
+            \Log::info('Emails de compra enviados', [
+                'gift_id' => $gift->id,
+                'buyer_name' => $buyerName,
+                'buyer_email' => $buyerEmail,
+                'couple_emails' => $emailList,
+                'payment_method' => $paymentMethod,
+                'has_message' => !empty($buyerMessage)
+            ]);
+            
+            return ['success' => true, 'error' => null];
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar emails de compra', [
+                'error' => $e->getMessage(),
+                'gift_id' => $gift->id,
+                'buyer_email' => $buyerEmail
+            ]);
+            
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Envia apenas notificação para os noivos (quando não tem email do comprador)
+     * @return array ['success' => bool, 'error' => string|null]
+     */
+    private function sendNotificationToCouple(Gift $gift, string $buyerName, string $paymentMethod, ?string $buyerMessage = null): array
+    {
+        try {
+            // Email para os noivos (suporta múltiplos emails separados por vírgula)
+            $coupleEmails = env('COUPLE_EMAIL', 'laillaecristhian@gmail.com');
+            $emailList = array_map('trim', explode(',', $coupleEmails));
+            
+            foreach ($emailList as $email) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($email)->send(new GiftPurchasedNotification($gift, $buyerName, $paymentMethod, $buyerMessage));
+                }
+            }
+            
+            \Log::info('Email de notificação enviado para os noivos', [
+                'gift_id' => $gift->id,
+                'buyer_name' => $buyerName,
+                'couple_emails' => $emailList,
+                'payment_method' => $paymentMethod,
+                'has_message' => !empty($buyerMessage)
+            ]);
+            
+            return ['success' => true, 'error' => null];
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar email para os noivos', [
+                'error' => $e->getMessage(),
+                'gift_id' => $gift->id
+            ]);
+            
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
     }
 }

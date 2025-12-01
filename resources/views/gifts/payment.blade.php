@@ -9,7 +9,18 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Anaktoria Font -->
+    <style>
+        @font-face {
+            font-family: 'Anaktoria';
+            src: url('{{ asset('fonts/Anaktoria.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -19,17 +30,44 @@
     
     <!-- CSS específico -->
     <style>
-        /* Header always visible */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #6c757d;
+            --gray-600: #495057;
+            --gray-700: #343a40;
+            --gray-800: #212529;
+        }
+
+        body {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+        }
+
+        /* Header transparent */
         .main-header {
-            background: rgba(45, 74, 45, 0.95);
+            background: transparent;
             backdrop-filter: blur(10px);
+            box-shadow: none;
+        }
+        
+        .main-header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            color: var(--black);
         }
         
         /* Payment Page */
         .payment-page {
-            background: var(--color-cream);
+            background: var(--gray-100);
             padding: var(--spacing-3xl) var(--spacing-md);
-            padding-top: 100px;
+            padding-top: 120px;
             min-height: 100vh;
         }
         
@@ -51,9 +89,10 @@
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-xs);
-            color: var(--color-primary);
+            color: var(--black);
             font-size: 1rem;
             transition: all var(--transition-normal);
+            text-decoration: none;
         }
         
         .payment-back:hover {
@@ -70,13 +109,14 @@
         
         .payment-title {
             font-size: clamp(1.8rem, 5vw, 3rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-xs);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .payment-subtitle {
             font-size: clamp(1rem, 2.5vw, 1.2rem);
-            color: var(--color-text-light);
+            color: var(--gray-600);
         }
         
         @media (max-width: 640px) {
@@ -105,7 +145,7 @@
         
         /* Summary Card */
         .summary-card {
-            background: var(--color-off-white);
+            background: var(--white);
             border-radius: var(--radius-lg);
             padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
@@ -121,8 +161,9 @@
         
         .summary-title {
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-md);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .summary-image {
@@ -136,38 +177,39 @@
         
         .summary-gift-name {
             font-size: clamp(1.2rem, 2.5vw, 1.4rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-sm);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .summary-description {
             font-size: clamp(0.9rem, 2vw, 1rem);
-            color: var(--color-text-light);
+            color: var(--gray-600);
             line-height: 1.6;
             margin-bottom: var(--spacing-md);
         }
         
         .summary-price {
             padding-top: var(--spacing-md);
-            border-top: 1px solid rgba(45, 74, 45, 0.1);
+            border-top: 1px solid var(--gray-200);
         }
         
         .summary-price-label {
             font-size: 0.9rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
             margin-bottom: var(--spacing-xs);
         }
         
         .summary-price-value {
-            font-family: var(--font-heading);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.5rem, 4vw, 2rem);
-            color: var(--color-primary);
+            color: var(--black);
             font-weight: 600;
         }
         
         /* Payment Form */
         .payment-form-card {
-            background: var(--color-off-white);
+            background: var(--white);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-md);
@@ -185,11 +227,12 @@
         
         .form-section-title {
             font-size: clamp(1.2rem, 3vw, 1.4rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-md);
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .form-group {
@@ -200,23 +243,37 @@
             display: block;
             margin-bottom: var(--spacing-xs);
             font-size: 1rem;
-            color: var(--color-text-dark);
+            color: var(--gray-700);
             font-weight: 500;
         }
         
-        .form-group input {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: var(--spacing-sm) var(--spacing-md);
-            border: 2px solid rgba(45, 74, 45, 0.2);
+            border: 2px solid var(--gray-300);
             border-radius: var(--radius-md);
             font-size: 1rem;
             transition: border-color var(--transition-normal);
-            background: var(--color-cream);
+            background: var(--gray-100);
+            font-family: inherit;
         }
         
-        .form-group input:focus {
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: var(--color-primary);
+            border-color: var(--black);
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
         }
         
         .form-error {
@@ -248,23 +305,23 @@
             align-items: center;
             gap: var(--spacing-md);
             padding: var(--spacing-md);
-            border: 2px solid rgba(45, 74, 45, 0.2);
+            border: 2px solid var(--gray-300);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: all var(--transition-normal);
-            background: var(--color-cream);
+            background: var(--gray-100);
         }
         
         .payment-method input:checked + .payment-method-label {
-            border-color: var(--color-primary);
-            background: rgba(45, 74, 45, 0.05);
+            border-color: var(--black);
+            background: var(--white);
         }
         
         .payment-method-icon {
             width: 3rem;
             height: 3rem;
-            background: var(--color-primary);
-            color: var(--color-cream);
+            background: var(--black);
+            color: var(--white);
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
@@ -280,24 +337,24 @@
         }
         
         .payment-method-name {
-            font-family: var(--font-heading);
+            font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1rem, 2.5vw, 1.2rem);
-            color: var(--color-primary);
+            color: var(--black);
             font-weight: 600;
         }
         
         .payment-method-desc {
             font-size: 0.85rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
         }
         
         /* Method Sections */
         .method-section {
             margin-top: var(--spacing-lg);
             padding: var(--spacing-lg);
-            background: var(--color-cream);
+            background: var(--gray-100);
             border-radius: var(--radius-md);
-            border: 2px solid rgba(45, 74, 45, 0.1);
+            border: 2px solid var(--gray-200);
             display: none;
         }
         
@@ -312,54 +369,72 @@
         
         .pix-icon {
             font-size: 3rem;
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-sm);
         }
         
         .pix-title {
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-xs);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .pix-desc {
             font-size: 1rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
             margin-bottom: var(--spacing-lg);
         }
         
-        .pix-qr-placeholder {
-            width: 200px;
-            height: 200px;
-            background: var(--color-off-white);
-            border: 2px dashed rgba(45, 74, 45, 0.3);
-            border-radius: var(--radius-md);
+        .pix-qr-container {
+            width: 220px;
+            height: 220px;
             margin: 0 auto var(--spacing-lg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
         }
         
-        .pix-qr-placeholder i {
-            font-size: 3rem;
-            color: var(--color-primary);
-            opacity: 0.4;
+        .pix-qr-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
-        .pix-qr-placeholder p {
-            font-size: 0.9rem;
-            color: var(--color-text-light);
+        .pix-recipient {
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            text-align: left;
         }
-        
+
+        .pix-recipient-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: var(--spacing-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pix-recipient-info p {
+            font-size: 1rem;
+            color: var(--gray-700);
+            margin: 0.25rem 0;
+        }
+
+        .pix-recipient-info strong {
+            color: var(--black);
+        }
+
         .pix-key-wrapper {
             margin-bottom: var(--spacing-md);
         }
         
         .pix-key-label {
             font-size: 0.9rem;
-            color: var(--color-text-dark);
+            color: var(--gray-700);
             margin-bottom: var(--spacing-xs);
             text-align: left;
         }
@@ -372,16 +447,17 @@
         .pix-key-input input {
             flex: 1;
             padding: var(--spacing-sm);
-            border: 2px solid rgba(45, 74, 45, 0.2);
+            border: 2px solid var(--gray-300);
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
-            background: var(--color-off-white);
+            background: var(--white);
+            font-family: inherit;
         }
         
         .copy-btn {
             padding: var(--spacing-sm) var(--spacing-md);
-            background: var(--color-primary);
-            color: var(--color-cream);
+            background: var(--black);
+            color: var(--white);
             border: none;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
@@ -390,6 +466,7 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
+            font-family: inherit;
         }
         
         .copy-btn:hover {
@@ -401,21 +478,21 @@
             align-items: flex-start;
             gap: var(--spacing-sm);
             padding: var(--spacing-sm);
-            background: rgba(45, 74, 45, 0.05);
-            border-left: 3px solid var(--color-primary);
+            background: var(--white);
+            border-left: 3px solid var(--black);
             border-radius: var(--radius-sm);
             text-align: left;
         }
         
         .pix-info-box i {
-            color: var(--color-primary);
+            color: var(--black);
             flex-shrink: 0;
             margin-top: 0.1rem;
         }
         
         .pix-info-box p {
             font-size: 0.9rem;
-            color: var(--color-text-dark);
+            color: var(--gray-700);
             line-height: 1.5;
             margin: 0;
         }
@@ -427,40 +504,41 @@
         
         .card-icon {
             font-size: 3rem;
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-sm);
         }
         
         .card-title {
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            color: var(--color-primary);
+            color: var(--black);
             margin-bottom: var(--spacing-xs);
+            font-family: 'Cormorant Garamond', Georgia, serif;
         }
         
         .card-desc {
             font-size: 1rem;
-            color: var(--color-text-light);
+            color: var(--gray-600);
             margin-bottom: var(--spacing-sm);
         }
         
         .card-info-text {
             font-size: 0.9rem;
-            color: var(--color-text-light);
+            color: var(--gray-500);
         }
         
         /* Submit Button */
         .submit-wrapper {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
-            border-top: 1px solid rgba(45, 74, 45, 0.1);
+            border-top: 1px solid var(--gray-200);
         }
         
         .submit-btn {
             width: 100%;
             padding: var(--spacing-md);
-            background: var(--color-primary);
-            color: var(--color-cream);
-            border: 2px solid var(--color-primary);
+            background: var(--black);
+            color: var(--white);
+            border: 2px solid var(--black);
             border-radius: var(--radius-full);
             font-size: clamp(1rem, 2.5vw, 1.2rem);
             font-weight: 500;
@@ -470,11 +548,12 @@
             align-items: center;
             justify-content: center;
             gap: var(--spacing-xs);
+            font-family: inherit;
         }
         
         .submit-btn:hover:not(:disabled) {
             background: transparent;
-            color: var(--color-primary);
+            color: var(--black);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
@@ -487,7 +566,7 @@
         .submit-hint {
             text-align: center;
             font-size: 0.9rem;
-            color: var(--color-text-light);
+            color: var(--gray-500);
             margin-top: var(--spacing-sm);
             display: none;
         }
@@ -514,11 +593,64 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+
+        /* Footer */
+        .footer {
+            background: #424242;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .footer-quote {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .footer-names {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-names h3 {
+            font-family: 'Anaktoria', 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        .footer-names .text-script {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-date {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="main-header" id="main-header">
+    <header class="main-header scrolled" id="main-header">
         <nav class="header-nav">
             <div class="nav-links">
                 <a href="{{ route('home') }}" class="nav-link">Início</a>
@@ -605,6 +737,35 @@
                             <p class="form-error">{{ $message }}</p>
                             @enderror
                         </div>
+                        
+                        <div class="form-group">
+                            <label for="buyer_email">E-mail *</label>
+                            <input 
+                                type="email" 
+                                id="buyer_email" 
+                                name="buyer_email" 
+                                required
+                                placeholder="Digite seu e-mail para confirmação"
+                            >
+                            @error('buyer_email')
+                            <p class="form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="buyer_message">Mensagem para os noivos (opcional)</label>
+                            <textarea 
+                                id="buyer_message" 
+                                name="buyer_message" 
+                                rows="4"
+                                placeholder="Escreva uma mensagem carinhosa para Lailla e Cristhian..."
+                                maxlength="500"
+                            ></textarea>
+                            <p class="form-hint">Máximo de 500 caracteres</p>
+                            @error('buyer_message')
+                            <p class="form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                     
                     <!-- Payment Method -->
@@ -650,15 +811,23 @@
                             <h4 class="pix-title">Pague com PIX</h4>
                             <p class="pix-desc">Escaneie o QR Code ou copie o código PIX para pagar</p>
                             
-                            <div class="pix-qr-placeholder">
-                                <i class="bi bi-qr-code"></i>
-                                <p>QR Code PIX</p>
+                            <div class="pix-qr-container">
+                                <img src="{{ asset('Qr Code.jpeg') }}" alt="QR Code PIX">
+                            </div>
+                            
+                            <!-- Dados do Recebedor -->
+                            <div class="pix-recipient">
+                                <p class="pix-recipient-label">Dados do recebedor:</p>
+                                <div class="pix-recipient-info">
+                                    <p><strong>Nome:</strong> Lailla Evelin Nunes Silva</p>
+                                    <p><strong>CPF:</strong> 019.710.146-13</p>
+                                </div>
                             </div>
                             
                             <div class="pix-key-wrapper">
                                 <p class="pix-key-label">Chave PIX (copiar e colar)</p>
                                 <div class="pix-key-input">
-                                    <input type="text" id="pix-key" value="00000000000" readonly>
+                                    <input type="text" id="pix-key" value="191fd0fc-bc7c-48a0-9eb7-59506e4e1ebf" readonly>
                                     <button type="button" class="copy-btn" onclick="copyPixKey()">
                                         <i class="bi bi-copy"></i>
                                         <span>Copiar</span>
@@ -735,6 +904,7 @@
             const submitText = document.getElementById('submit-text');
             const submitHint = document.getElementById('submit-hint');
             const buyerNameInput = document.getElementById('buyer_name');
+            const buyerEmailInput = document.getElementById('buyer_email');
             
             // Toggle payment sections
             function toggleSections() {
@@ -751,12 +921,20 @@
             pixRadio.addEventListener('change', toggleSections);
             cardRadio.addEventListener('change', toggleSections);
             
+            // Validate email
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
             // Check if can submit
             function checkCanSubmit() {
                 const buyerName = buyerNameInput.value.trim();
+                const buyerEmail = buyerEmailInput.value.trim();
                 const hasMethod = pixRadio.checked || cardRadio.checked;
+                const validEmail = isValidEmail(buyerEmail);
                 
-                if (buyerName && hasMethod) {
+                if (buyerName && buyerEmail && validEmail && hasMethod) {
                     submitBtn.disabled = false;
                     submitHint.style.display = 'none';
                     
@@ -774,6 +952,7 @@
             }
             
             buyerNameInput.addEventListener('input', checkCanSubmit);
+            buyerEmailInput.addEventListener('input', checkCanSubmit);
             
             // Copy PIX key
             window.copyPixKey = function() {

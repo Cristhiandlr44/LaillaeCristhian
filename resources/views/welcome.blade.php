@@ -43,7 +43,7 @@
         <div class="hero-content">
             <div class="hero-names">
                 <h1 class="hero-name">Lailla</h1>
-                <span class="hero-ampersand">&</span>
+                <span class="hero-ampersand">and</span>
                 <h1 class="hero-name">Cristhian</h1>
             </div>
             
@@ -64,12 +64,9 @@
 
     <!-- Section 2: Nossa História -->
     <section class="section-story" id="story">
-        <div class="story-bg-title">NOSSA HISTÓRIA</div>
-        
         <div class="container story-content">
             <div class="story-header reveal">
-                <p class="story-subtitle">De um encontro casual ao nosso para sempre</p>
-                <h2 class="story-title">Nossa História</h2>
+                <img src="{{ asset('Titulos/NOSSA HISTORIA.svg') }}" alt="Nossa História - De um encontro casual ao nosso para sempre" class="story-title-svg">
             </div>
             
             <div class="story-grid">
@@ -89,10 +86,7 @@
                     <p>Ela, a mente que sonha nos detalhes, ele, o coração que floresce no instante.</p>
                     <p>Entre opostos nasceu equilíbrio, entre diferenças completude, amizade tornou-se destino, companheirismo eternidade.</p>
                     <p>E no enlace das almas, o amor se fez promessa.</p>
-                    
-                    <div class="story-quote">
-                        <p>"Porque toda história de amor é bonita, mas a nossa é a minha favorita."</p>
-                    </div>
+                    <p>Porque toda história de amor é bonita, mas a nossa é a minha favorita.</p>
                 </div>
             </div>
         </div>
@@ -107,8 +101,7 @@
         
         <div class="event-content">
             <div class="event-header reveal">
-                <p class="event-subtitle">Junte-se a nós para o início do nosso para sempre!</p>
-                <h2 class="event-title">O Casamento</h2>
+                <img src="{{ asset('Titulos/O CASAMENTO.svg') }}" alt="O Casamento - Junte-se a nós para o início do nosso para sempre!" class="section-title-svg">
             </div>
             
             <!-- Accordion Style for all screens -->
@@ -205,8 +198,7 @@
         </div>
         
         <div class="gift-cta-content reveal">
-            <p class="gift-cta-subtitle">Sua presença é o maior presente de todos</p>
-            <h2 class="gift-cta-title">Seleção de Presentes</h2>
+            <img src="{{ asset('Titulos/SELECAO DE PRESENTES.svg') }}" alt="Seleção de Presentes - Sua presença é o maior presente de todos" class="section-title-svg gift-title-svg">
             
             <p class="gift-cta-text">
                 Pensamos com carinho em alguns itens que nos ajudarão a construir nosso lar e nossa nova fase juntos.
@@ -234,8 +226,7 @@
                 <!-- Content -->
                 <div class="rsvp-content reveal">
                     <div class="rsvp-header">
-                        <p class="rsvp-subtitle">Sua presença torna nosso dia ainda mais especial</p>
-                        <h2 class="rsvp-title">RSVP</h2>
+                        <img src="{{ asset('Titulos/RSVP.svg') }}" alt="RSVP - Sua presença torna nosso dia ainda mais especial" class="section-title-svg rsvp-title-svg">
                     </div>
                     
                     <p class="rsvp-text">
@@ -283,12 +274,14 @@
         </div>
     </section>
 
-    <!-- Section 7: Gallery -->
+    <!-- Section 7: Gallery Carousel -->
     <section class="section-gallery" id="gallery">
-        <div class="container">
-            <h2 class="gallery-title reveal">Momentos Especiais</h2>
+        <div class="gallery-wrapper">
+            <button class="carousel-btn carousel-btn-prev" id="gallery-prev">
+                <i class="bi bi-chevron-left"></i>
+            </button>
             
-            <div class="gallery-grid">
+            <div class="gallery-carousel" id="gallery-carousel">
                 <div class="gallery-item reveal">
                     <img src="{{ asset('1 imagem final.jpeg') }}" alt="Galeria - Foto 1" class="gallery-image">
                 </div>
@@ -314,6 +307,10 @@
                     <img src="{{ asset('4 imagem.jpeg') }}" alt="Galeria - Foto 8" class="gallery-image">
                 </div>
             </div>
+            
+            <button class="carousel-btn carousel-btn-next" id="gallery-next">
+                <i class="bi bi-chevron-right"></i>
+            </button>
         </div>
     </section>
 
@@ -324,7 +321,7 @@
             
             <div class="footer-names">
                 <h3>Lailla</h3>
-                <span class="text-script">&</span>
+                <span class="footer-ampersand">&</span>
                 <h3>Cristhian</h3>
             </div>
             
@@ -456,6 +453,25 @@
         revealElements.forEach(el => {
             revealObserver.observe(el);
         });
+
+        // ========================================
+        // Gallery Carousel Navigation
+        // ========================================
+        const carousel = document.getElementById('gallery-carousel');
+        const prevBtn = document.getElementById('gallery-prev');
+        const nextBtn = document.getElementById('gallery-next');
+        
+        if (carousel && prevBtn && nextBtn) {
+            const scrollAmount = 350;
+            
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+        }
     });
     </script>
 </body>
