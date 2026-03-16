@@ -1291,7 +1291,7 @@
     <!-- Hero Section - Same as Home Gift CTA -->
     <section class="section-gift-cta" id="gifts-hero">
         <div class="gift-cta-background">
-            <img src="{{ asset('giftstore.jpeg') }}" alt="Lista de Presentes" class="gift-cta-bg-image">
+            <img src="{{ asset('L&C-37.jpg') }}" alt="Lista de Presentes" class="gift-cta-bg-image">
             <div class="gift-cta-overlay"></div>
         </div>
         

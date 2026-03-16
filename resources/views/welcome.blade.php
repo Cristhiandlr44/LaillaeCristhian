@@ -304,7 +304,7 @@
                     <img src="{{ asset('5 imagem.jpeg') }}" alt="Galeria - Foto 7" class="gallery-image">
                 </div>
                 <div class="gallery-item reveal">
-                    <img src="{{ asset('4 imagem.jpeg') }}" alt="Galeria - Foto 8" class="gallery-image">
+                    <img src="{{ asset('L&C-107.jpg') }}" alt="Galeria - Foto 8" class="gallery-image">
                 </div>
             </div>
             

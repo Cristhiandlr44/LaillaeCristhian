@@ -882,7 +882,7 @@
                 <div class="gift-back-section">
                     <a href="{{ route('gifts.index') }}" class="gift-back-link">
                         <i class="bi bi-arrow-left"></i>
-                        <span>Voltar à lista de presentes</span>
+                        <span>Voltar à </span>
                     </a>
                 </div>
             </div>
